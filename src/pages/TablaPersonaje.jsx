@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { PersonajesMapper } from '../services/API';
 
 const columns = [
   { id: 'nombre', label: 'Nombre', minWidth: 10 },
@@ -20,26 +21,17 @@ const columns = [
   { id: 'planetaNacimiento', label: 'Planeta de Nacimiento', minWidth: 10 }
 ];
 
-function createCharacter(nombre, altura, peso, colorCabello, colorPiel, colorOjos, fechaNacimiento, genero, planetaNacimiento) {
-  return { nombre, altura, peso, colorCabello, colorPiel, colorOjos, fechaNacimiento, genero, planetaNacimiento };
-}
-
-const rows = [
-  createCharacter('Luke Skywalker', 172, 77, 'Rubio', 'Claro', 'Azules', '19BBY', 'Masculino', 'Tatooine'),
-  createCharacter('Darth Vader', 202, 136, 'Negro', 'Blanco', 'Amarillos', '41.9BBY', 'Masculino', 'Tatooine'),
-  createCharacter('Leia Organa', 150, 49, 'Rubio', 'Claro', 'Marrones', '19BBY', 'Femenino', 'Alderaan'),
-  createCharacter('Yoda', 66, 17, 'Blanco', 'Verde', 'Marrones', '896BBY', 'Masculino', 'Desconocido'),
-  createCharacter('Luke Skywalker', 172, 77, 'Rubio', 'Claro', 'Azules', '19BBY', 'Masculino', 'Tatooine'),
-  createCharacter('Darth Vader', 202, 136, 'Negro', 'Blanco', 'Amarillos', '41.9BBY', 'Masculino', 'Tatooine'),
-  createCharacter('Leia Organa', 150, 49, 'Rubio', 'Claro', 'Marrones', '19BBY', 'Femenino', 'Alderaan'),
-  createCharacter('Yoda', 66, 17, 'Blanco', 'Verde', 'Marrones', '896BBY', 'Masculino', 'Desconocido'),
-  createCharacter('Luke Skywalker', 172, 77, 'Rubio', 'Claro', 'Azules', '19BBY', 'Masculino', 'Tatooine'),
-  createCharacter('Darth Vader', 202, 136, 'Negro', 'Blanco', 'Amarillos', '41.9BBY', 'Masculino', 'Tatooine'),
-  createCharacter('Leia Organa', 150, 49, 'Rubio', 'Claro', 'Marrones', '19BBY', 'Femenino', 'Alderaan'),
-  createCharacter('Yoda', 66, 17, 'Blanco', 'Verde', 'Marrones', '896BBY', 'Masculino', 'Desconocido'),
-];
-
 function TablaPersonaje() {
+  const [personajes, setPersonajes] = useState([]);
+
+  useEffect(() => {
+    const cargarPersonajes = async () => {
+      const data = await PersonajesMapper();
+      setPersonajes(data);
+    };
+    cargarPersonajes();
+  }, []);
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -80,11 +72,11 @@ function TablaPersonaje() {
           </TableHead>
 
           <TableBody>
-            {rows
+            {personajes
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.nombre}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
@@ -106,7 +98,7 @@ function TablaPersonaje() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={personajes.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
