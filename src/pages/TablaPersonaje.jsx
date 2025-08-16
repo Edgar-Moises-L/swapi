@@ -7,7 +7,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { PersonajesMapper } from '../services/API';
+import Button from '@mui/material/Button';
+
+import { PersonajesMapper } from '../services/PersonajesMapper';
+import BasicModal from "../Components/Modal";
 
 const columns = [
   { id: 'nombre', label: 'Nombre', minWidth: 10 },
@@ -16,13 +19,16 @@ const columns = [
   { id: 'colorCabello', label: 'Color de Cabello', minWidth: 10 },
   { id: 'colorPiel', label: 'Color de Piel', minWidth: 10 },
   { id: 'colorOjos', label: 'Color de los Ojos', minWidth: 10 },
-  { id: 'fechaNacimiento', label: 'Fecha de Naciemiento', minWidth: 10 },
-  { id: 'genero', label: 'Genero', minWidth: 10 },
-  { id: 'planetaNacimiento', label: 'Planeta de Nacimiento', minWidth: 10 }
+  { id: 'fechaNacimiento', label: 'Fecha de Nacimiento', minWidth: 10 },
+  { id: 'genero', label: 'Género', minWidth: 10 },
+  { id: 'planetaNacimiento', label: 'Planeta de Nacimiento', minWidth: 10 },
+  { id: 'informacionGeneral', label: 'Información General', minWidth: 10 }
 ];
 
 function TablaPersonaje() {
   const [personajes, setPersonajes] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   useEffect(() => {
     const cargarPersonajes = async () => {
@@ -31,6 +37,16 @@ function TablaPersonaje() {
     };
     cargarPersonajes();
   }, []);
+
+  const handleOpenModal = (row) => {
+    setSelectedRow(row);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedRow(null);
+  };
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -52,11 +68,10 @@ function TablaPersonaje() {
     }}>
 
       <TableContainer sx={{
-        maxHeight: 600,
+        maxHeight: 700
       }}>
-
-        <Table stickyHeader aria-label="sticky table">
-
+        
+        <Table stickyHeader aria-label="tabla de personajes">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -74,24 +89,32 @@ function TablaPersonaje() {
           <TableBody>
             {personajes
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.nombre}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
+              .map((row) => (
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.nombre}>
+                  {columns.map((column) => {
+                    const value = row[column.id];
+                    if (column.id === "informacionGeneral") {
                       return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
+                        <TableCell key={column.id}>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            onClick={() => handleOpenModal(row)}
+                          >
+                            Ver más
+                          </Button>
                         </TableCell>
                       );
-                    })}
-                  </TableRow>
-                );
-              })}
+                    }
+                    return (
+                      <TableCell key={column.id} align={column.align}>
+                        {value}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
           </TableBody>
-
         </Table>
       </TableContainer>
 
@@ -105,8 +128,13 @@ function TablaPersonaje() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
+      <BasicModal
+        open={openModal}
+        handleClose={handleCloseModal}
+        content={selectedRow}
+      />
     </Paper>
   );
 }
 
-export default TablaPersonaje
+export default TablaPersonaje;

@@ -1,7 +1,10 @@
 const BASE_URL = 'https://swapi.info/api/people';
 const cachePlanetas = {};
+const cachePelicula = {};
+const cacheVeiculo = {};
+const cacheNave = {};
 
-export const fetchPersonajes = async () => {
+export const fetchDataPersonajes = async () => {
     try {
         const response = await fetch(BASE_URL);
         const data = await response.json();
@@ -28,27 +31,50 @@ export const fetchPlaneta = async (url) => {
     }
 };
 
+export const fetchPelicula = async (url) => {
+    if (cachePelicula[url]) {
+        return cachePelicula[url];
+    }
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        cachePelicula[url] = data.title;
+        return data.name; 
+    } catch (error) {
+        console.error(error);
+        return "Desconocido";
+    }
+};
 
-export const PersonajesMapper = async () => {
-    const data = await fetchPersonajes();
-    const personajesMappeados = await Promise.all(
+export const fetchVeiculo = async (url) => {
+    if (cacheVeiculo[url]) {
+        return cacheVeiculo[url];
+    }
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        cacheVeiculo[url] = data.name;
+        return data.name; 
+    } catch (error) {
+        console.error(error);
+        return "Desconocido";
+    }
+};
 
-        data.map(async p => {
-            const nombrePlaneta = await fetchPlaneta(p.homeworld);
-
-            return {
-                nombre: p.name,
-                altura: p.height,
-                peso: p.mass,
-                colorCabello: p.hair_color,
-                colorPiel: p.skin_color,
-                colorOjos: p.eye_color,
-                fechaNacimiento: p.birth_year,
-                genero: p.gender,
-                planetaNacimiento: nombrePlaneta
-            };
-        })
-    );
-
-    return personajesMappeados;
+export const fetchNave = async (url) => {
+    if (cacheNave[url]) {
+        return cacheNave[url];
+    }
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        cacheNave[url] = data.name;
+        return data.name; 
+    } catch (error) {
+        console.error(error);
+        return "Desconocido";
+    }
 };
