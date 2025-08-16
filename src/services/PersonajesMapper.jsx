@@ -16,9 +16,9 @@ export const PersonajesMapper = async () => {
                 fechaNacimiento: p.birth_year,
                 genero: p.gender,
                 planetaNacimiento: nombrePlaneta,
-                peliculas: p.films ,
-                vehiculos: p.vehicles ,
-                naves: p.starships , 
+                peliculas: p.films,
+                vehiculos: p.vehicles,
+                naves: p.starships,
             };
         })
     );

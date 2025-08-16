@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { fetchPelicula, fetchVeiculo, fetchNave } from '../services/API';
 
+// Estilo del modal
 const style = {
   position: 'absolute',
   top: '50%',
@@ -15,31 +18,65 @@ const style = {
 };
 
 export default function BasicModal({ open, handleClose, content }) {
-  const keysPermitidas = ["peliculas", "vehiculos", "naves"];
-  if (!content) return null; 
+  const [peliculas, setPeliculas] = useState([]);
+  const [vehiculos, setVehiculos] = useState([]);
+  const [naves, setNaves] = useState([]);
 
+  useEffect(() => {
+    if (!content) return;
+
+    const cargarDatos = async () => {
+      try {
+        const titulosPeliculas = await Promise.all(
+          content.peliculas.map(url => fetchPelicula(url))
+        );
+        const nombresVehiculos = await Promise.all(
+          content.vehiculos.map(url => fetchVeiculo(url))
+        );
+        const nombresNaves = await Promise.all(
+          content.naves.map(url => fetchNave(url))
+        );
+
+        setPeliculas(titulosPeliculas);
+        setVehiculos(nombresVehiculos);
+        setNaves(nombresNaves);
+        console.log(peliculas);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    cargarDatos();
+  }, [content]);
+
+  if (!content) return null;
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-    >
+    <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
-        <Typography id="modal-title" variant="h6"gutterBottom>
+        <Typography id="modal-title" variant="h6" gutterBottom>
           Información del Personaje
         </Typography>
 
-   
+        <Typography variant="subtitle1" mt={2}>
+          Películas:
+        </Typography>
+        {peliculas.map((title, i) => (
+          <Typography key={i}>- {title}</Typography>
+        ))}
 
-{Object.entries(content)
-  .filter(([key]) => keysPermitidas.includes(key)) 
-  .map(([key, value]) => (
-    <Typography key={key}>
-      <strong>{key}:</strong> {value}
-    </Typography>
-))}
+        <Typography variant="subtitle1" mt={2}>
+          Vehículos:
+        </Typography>
+        {vehiculos.map((name, i) => (
+          <Typography key={i}>- {name}</Typography>
+        ))}
 
-
-        
+        <Typography variant="subtitle1" mt={2}>
+          Naves:
+        </Typography>
+        {naves.map((name, i) => (
+          <Typography key={i}>- {name}</Typography>
+        ))}
       </Box>
     </Modal>
   );
