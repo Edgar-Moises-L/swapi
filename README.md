@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Esta es una **Single Page Application (SPA)** creada con **React** y **Vite** que consume la API de Star Wars ([SWAPI]((https://swapi.info/)).
+Esta es una **Single Page Application (SPA)** creada con **React** y **Vite** que consume la API de Star Wars (SWAPI).
 
 La aplicación permite:
 - **Mostrar** una lista de personajes de Star Wars en una tabla.
