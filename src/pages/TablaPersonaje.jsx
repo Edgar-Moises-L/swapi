@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 
 import { PersonajesMapper } from '../services/PersonajesMapper';
 import BasicModal from "../Components/Modal";
+import Buscador from '../Components/buscador';
 
 const columns = [
   { id: 'nombre', label: 'Nombre', minWidth: 10 },
@@ -22,11 +23,12 @@ const columns = [
   { id: 'fechaNacimiento', label: 'Fecha de Nacimiento', minWidth: 10 },
   { id: 'genero', label: 'Género', minWidth: 10 },
   { id: 'planetaNacimiento', label: 'Planeta de Nacimiento', minWidth: 10 },
-  { id: 'informacionGeneral', label: 'Información General', minWidth: 10 }
+  { id: 'informacionAdicional', label: 'Información Adicional', minWidth: 10 }
 ];
 
 function TablaPersonaje() {
   const [personajes, setPersonajes] = useState([]);
+  const [allPersonajes, setAllPersonajes] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -34,9 +36,22 @@ function TablaPersonaje() {
     const cargarPersonajes = async () => {
       const data = await PersonajesMapper();
       setPersonajes(data);
+      setAllPersonajes(data);
     };
     cargarPersonajes();
   }, []);
+
+  const handleSearch = (query) => {
+    if (!query) {
+      setPersonajes(allPersonajes);
+    } else {
+      const filtered = allPersonajes.filter((p) =>
+        p.nombre.toLowerCase().includes(query.toLowerCase())
+      );
+      setPersonajes(filtered);
+    }
+    setPage(0);
+  };
 
   const handleOpenModal = (row) => {
     setSelectedRow(row);
@@ -66,11 +81,12 @@ function TablaPersonaje() {
       overflow: 'hidden',
       m: 10
     }}>
+      <Buscador onSearch={handleSearch} />
 
       <TableContainer sx={{
         maxHeight: 700
       }}>
-        
+
         <Table stickyHeader aria-label="tabla de personajes">
           <TableHead>
             <TableRow>
@@ -93,7 +109,7 @@ function TablaPersonaje() {
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.nombre}>
                   {columns.map((column) => {
                     const value = row[column.id];
-                    if (column.id === "informacionGeneral") {
+                    if (column.id === "informacionAdicional") {
                       return (
                         <TableCell key={column.id}>
                           <Button
