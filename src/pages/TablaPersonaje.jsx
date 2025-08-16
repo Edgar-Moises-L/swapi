@@ -14,17 +14,18 @@ import BasicModal from "../Components/Modal";
 import Buscador from '../Components/buscador';
 
 const columns = [
-  { id: 'nombre', label: 'Nombre', minWidth: 10 },
-  { id: 'altura', label: 'Altura', minWidth: 10 },
-  { id: 'peso', label: 'Peso', minWidth: 10 },
-  { id: 'colorCabello', label: 'Color de Cabello', minWidth: 10 },
-  { id: 'colorPiel', label: 'Color de Piel', minWidth: 10 },
-  { id: 'colorOjos', label: 'Color de los Ojos', minWidth: 10 },
-  { id: 'fechaNacimiento', label: 'Fecha de Nacimiento', minWidth: 10 },
-  { id: 'genero', label: 'Género', minWidth: 10 },
-  { id: 'planetaNacimiento', label: 'Planeta de Nacimiento', minWidth: 10 },
-  { id: 'informacionAdicional', label: 'Información Adicional', minWidth: 10 }
+  { id: 'nombre', label: 'Nombre', minWidth: 150, align: 'left' },
+  { id: 'altura', label: 'Altura', minWidth: 70, align: 'center' },
+  { id: 'peso', label: 'Peso', minWidth: 70, align: 'center' },
+  { id: 'colorCabello', label: 'Color de Cabello', minWidth: 120, align: 'center' },
+  { id: 'colorPiel', label: 'Color de Piel', minWidth: 120, align: 'center' },
+  { id: 'colorOjos', label: 'Color de los Ojos', minWidth: 120, align: 'center' },
+  { id: 'fechaNacimiento', label: 'Fecha de Nacimiento', minWidth: 110, align: 'center' },
+  { id: 'genero', label: 'Género', minWidth: 100, align: 'center' },
+  { id: 'planetaNacimiento', label: 'Planeta de Nacimiento', minWidth: 150, align: 'center' },
+  { id: 'informacionAdicional', label: 'Información Adicional', minWidth: 130, align: 'center' },
 ];
+
 
 function TablaPersonaje() {
   const [personajes, setPersonajes] = useState([]);
@@ -79,7 +80,8 @@ function TablaPersonaje() {
     <Paper sx={{
       width: '90%',
       overflow: 'hidden',
-      m: 10
+      m: 10,
+      background: '#f0efeff3'
     }}>
       <Buscador onSearch={handleSearch} />
 
@@ -89,12 +91,12 @@ function TablaPersonaje() {
 
         <Table stickyHeader aria-label="tabla de personajes">
           <TableHead>
-            <TableRow>
+            <TableRow >
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, backgroundColor: '#b0ccd3e3', fontWeight: 'bold' }}
                 >
                   {column.label}
                 </TableCell>
@@ -111,9 +113,17 @@ function TablaPersonaje() {
                     const value = row[column.id];
                     if (column.id === "informacionAdicional") {
                       return (
-                        <TableCell key={column.id}>
+                        <TableCell key={column.id}
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100%',
+                          }}
+                        >
                           <Button
-                            variant="contained"
+                            variant="outlined"
+                            color="primary"
                             size="small"
                             onClick={() => handleOpenModal(row)}
                           >
@@ -123,7 +133,7 @@ function TablaPersonaje() {
                       );
                     }
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell key={column.id} align={column.align} >
                         {value}
                       </TableCell>
                     );

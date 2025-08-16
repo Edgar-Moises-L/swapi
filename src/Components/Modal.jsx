@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { fetchPelicula, fetchVeiculo, fetchNave } from '../services/API';
 
-// Estilo del modal
 const style = {
   position: 'absolute',
   top: '50%',
@@ -53,25 +52,25 @@ export default function BasicModal({ open, handleClose, content }) {
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
-        <Typography id="modal-title" variant="h6" gutterBottom>
+        <Typography id="modal-title" variant="h5" fontWeight="bold" gutterBottom>
           Información del Personaje
         </Typography>
 
-        <Typography variant="subtitle1" mt={2}>
+        <Typography variant="subtitle1" fontWeight="bold" mt={2}>
           Películas:
         </Typography>
         {peliculas.map((title, i) => (
           <Typography key={i}>- {title}</Typography>
         ))}
 
-        <Typography variant="subtitle1" mt={2}>
+        <Typography variant="subtitle1" fontWeight="bold" mt={2}>
           Vehículos:
         </Typography>
         {vehiculos.map((name, i) => (
           <Typography key={i}>- {name}</Typography>
         ))}
 
-        <Typography variant="subtitle1" mt={2}>
+        <Typography variant="subtitle1" fontWeight="bold" mt={2}>
           Naves:
         </Typography>
         {naves.map((name, i) => (
