@@ -1,12 +1,38 @@
-# React + Vite
+# Star Wars Characters App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
 
-Currently, two official plugins are available:
+Esta es una **Single Page Application (SPA)** creada con **React** y **Vite** que consume la API de Star Wars ([SWAPI]((https://swapi.info/)).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+La aplicación permite:
+- **Mostrar** una lista de personajes de Star Wars en una tabla.
+- **Buscar** personajes por nombre mediante un buscador.
+- **Ver información detallada** de cada personaje en un modal.
 
-## Expanding the ESLint configuration
+## Requisitos previos
+1. Tener npm
+   - Para comprobar usar el comando:  npm -v o npm --version
+2. Git — para clonar el repositorio
+   - Para comprobar usar el comando: git --version
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Cómo probar la aplicación
+
+1. Clonar el repositorio
+   
+   git clone https://github.com/Edgar-Moises-L/swapi.git
+   
+   cd swapi
+   
+3. Instala dependencias
+   
+   npm install
+   
+   npm install @mui/material @emotion/react @emotion/styled
+   
+4. Ejecuta la aplicación en modo desarrollo:
+   
+   npm run dev
+   
+6. Abrir en el navegador
+   
+   Por defecto, la aplicación estará disponible en http://localhost:5173
