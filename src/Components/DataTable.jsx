@@ -42,7 +42,7 @@ function DataTable({ columns, id, rows }) {
 
   return (
     <Paper sx={{ width: '90%', overflow: 'hidden', m: 10, background: '#f0efeff3' }}>
-      <TableContainer sx={{ maxHeight: 700 }}>
+      <TableContainer sx={{ maxHeight: 1000 }}>
         <Table stickyHeader aria-label="tabla de personajes">
           <TableHead>
             <TableRow >
@@ -87,7 +87,8 @@ function DataTable({ columns, id, rows }) {
                     }
 
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell //style={{ whiteSpace: 'normal', wordBreak: 'break-word' }} 
+                        key={column.id} align={column.align}>
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                       </TableCell>
                     );

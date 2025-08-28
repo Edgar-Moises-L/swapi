@@ -21,6 +21,7 @@ function FilmPage() {
 
     return (
         <>
+            <h1>Peliculas</h1>
             <DataTable columns={columns} id={id} rows={rows} />
         </>
     )

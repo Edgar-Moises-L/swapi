@@ -1,0 +1,16 @@
+export const columns = [
+  { id: 'name', label: 'Nombre', minWidth: 150, align: 'left' },
+  { id: 'birth_year', label: 'Año de Nacimiento', minWidth: 100, align: 'center' },
+  { id: 'eye_color', label: 'Color de Ojos', minWidth: 100, align: 'center' },
+  { id: 'gender', label: 'Género', minWidth: 80, align: 'center' },
+  { id: 'hair_color', label: 'Color de Cabello', minWidth: 120, align: 'center' },
+  { id: 'height', label: 'Altura', minWidth: 70, align: 'center' },
+  { id: 'mass', label: 'Peso', minWidth: 70, align: 'center' },
+  { id: 'skin_color', label: 'Color de Piel', minWidth: 120, align: 'center' },
+  { id: 'films', label: 'Películas', minWidth: 50, align: 'center' },
+  { id: 'homeworld', label: 'Planeta Natal', minWidth: 50, align: 'center' },
+  { id: 'species', label: 'Especie', minWidth: 20, align: 'center' },
+  { id: 'starships', label: 'Naves Estelares', minWidth: 50, align: 'center' },
+  { id: 'vehicles', label: 'Vehículos', minWidth: 50, align: 'center' },
+  { id: 'actions', label: 'Acciones', minWidth: 130, align: 'center' },
+];
