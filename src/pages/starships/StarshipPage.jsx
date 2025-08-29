@@ -2,6 +2,8 @@ import { columns } from './starshipsTableColumns.js'
 import { useFetch } from '../../hooks/useFetch.jsx';
 import { useState } from 'react';
 import DataTable from '../../Components/DataTable.jsx';
+import Menu from '../../Components/Menu.jsx';
+import Paper from '@mui/material/Paper';
 
 function StarshipPage() {
     const [page, setPage] = useState(1);
@@ -11,7 +13,7 @@ function StarshipPage() {
     const { data, loading, error } = useFetch(url);
     let rows;
 
-   if (Array.isArray(data.docs)) {
+    if (Array.isArray(data.docs)) {
         rows = data.docs;
         console.log(rows)
     } else {
@@ -23,10 +25,11 @@ function StarshipPage() {
     if (error) return <div> Error: {error}</div>
 
     return (
-        <>
+        <Paper sx={{ m: 4, background: '#f0efeff3' }}>
+            <Menu />
             <h1>Naves Espaciales</h1>
             <DataTable columns={columns} id={id} rows={rows} />
-        </>
+        </Paper>
     )
 }
 export default StarshipPage;
