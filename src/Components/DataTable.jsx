@@ -42,7 +42,6 @@ function DataTable({ columns, id, rows }) {
 
   return (
     <Paper sx={{ m: 4,background: '#f0efeff3' }}>
-
       <TableContainer sx={{ maxHeight: 1000 }}>
         <Table stickyHeader aria-label="tabla de personajes">
           <TableHead>

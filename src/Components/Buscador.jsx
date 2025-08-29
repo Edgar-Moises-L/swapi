@@ -7,7 +7,9 @@ function Buscador({ onSearch }) {
     const [input, setInput] = useState('');
 
     const handleClick = () => {
-        onSearch(input);
+        if (onSearch) {
+            onSearch(input);
+        }
     };
 
     return (
@@ -19,6 +21,7 @@ function Buscador({ onSearch }) {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
             />
+
             <Button variant="contained" onClick={handleClick} sx={{ ml: 1 }}>
                 Buscar
             </Button>
