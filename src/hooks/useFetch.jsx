@@ -2,17 +2,18 @@ import { useEffect, useState } from "react";
 import { fetchData } from "../services/Api.jsx";
 
 export function useFetch(url) {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([null]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
     useEffect(() => {
+      
         let controller = new AbortController();
         const getData = async () => {
             setLoading(true);
             try {
                 const jsonData = await fetchData(url, controller);
-                setData(jsonData);
+                setData(jsonData.data);
                 setError(null);
             } catch (error) {
                 setError(error.message);
@@ -20,6 +21,7 @@ export function useFetch(url) {
                 setLoading(false);
             }
         };
+        
         getData();
         return () => {
             controller.abort();

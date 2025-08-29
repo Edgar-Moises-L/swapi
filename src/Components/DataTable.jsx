@@ -41,7 +41,8 @@ function DataTable({ columns, id, rows }) {
   };
 
   return (
-    <Paper sx={{ width: '90%', overflow: 'hidden', m: 10, background: '#f0efeff3' }}>
+    <Paper sx={{ m: 4,background: '#f0efeff3' }}>
+
       <TableContainer sx={{ maxHeight: 1000 }}>
         <Table stickyHeader aria-label="tabla de personajes">
           <TableHead>
@@ -101,7 +102,7 @@ function DataTable({ columns, id, rows }) {
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[10]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}

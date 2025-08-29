@@ -1,6 +1,7 @@
-const BASE_URL = 'https://swapi.info/api';
+const BASE_URL = 'http://localhost:5100/api';
 
 export const fetchData = async (url, controller) => {
+
   try {
     const response = await fetch(BASE_URL + url, { signal: controller.signal });
     if (!response.ok) {
