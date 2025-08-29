@@ -7,10 +7,13 @@ import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
 import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
+import CustomModal from '../../Components/Modal.jsx';
+import Loading from '../../Components/Loading.jsx';
 
 function PlanetPage() {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
+    const [modalOpen, setModalOpen] = useState(false);
     const [url, setUrl] = useState(`/planets?page=${page}&limit=${limit}`);
     const { data, loading, error } = useFetch(url);
     const id = "name";
@@ -18,9 +21,13 @@ function PlanetPage() {
 
     useEffect(() => {
         if (error === "No se encontraron resultados") {
+            setModalOpen(true);
             setUrl(`/planets?page=${page}&limit=${limit}`);
         }
     }, [error]);
+        const handleCloseModal = () => {
+        setModalOpen(false);
+    };
 
     const search = (name) => {
         if (name.trim() === "") {
@@ -30,7 +37,7 @@ function PlanetPage() {
         }
     };
 
-    if (loading) return <div>Cargando ....</div>
+       if (loading)return (<Loading/>);
 
    if (error && error !== "No se encontraron resultados") {
         return <div>Error: {error}</div>;
@@ -42,6 +49,11 @@ function PlanetPage() {
             <Buscador onSearch={search} />
             <h1>Planetas</h1>
             <DataTable columns={columns} id={id} rows={rows} />
+                        <CustomModal
+                open={modalOpen}
+                onClose={handleCloseModal}
+                title="No se encontraron resultados"
+            />
         </Paper>
     )
 }

@@ -1,6 +1,6 @@
 import { Modal, Box, Typography, Button } from '@mui/material';
 
-function CustomModal({ open, onClose, title }) {
+function EliminarModal({ open, onClose, title }) {
     return (
         <Modal open={open} onClose={onClose}>
             <Box sx={{

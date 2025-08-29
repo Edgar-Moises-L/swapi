@@ -1,26 +1,34 @@
-import { columns } from './characterTableColumns.js'
-import { useEffect } from 'react';
-import { characterMap } from './characterMap.js'
+import { columns } from './characterTableColumns.js';
+import { useEffect, useState } from 'react';
+import { characterMap } from './characterMap.js';
 import { useFetch } from '../../hooks/useFetch.jsx';
-import { useState } from 'react';
 import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
 import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
+import CustomModal from '../../Components/Modal.jsx';
+import Loading from '../../Components/Loading.jsx';
 
 function CharacterPage() {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [url, setUrl] = useState(`/characters?page=${page}&limit=${limit}`);
+    const [modalOpen, setModalOpen] = useState(false);
+
     const { data, loading, error } = useFetch(url);
     const id = "name";
     let rows = Array.isArray(data?.docs) ? characterMap(data.docs) : [];
 
     useEffect(() => {
         if (error === "No se encontraron resultados") {
+            setModalOpen(true);
             setUrl(`/characters?page=${page}&limit=${limit}`);
         }
     }, [error]);
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
 
     const search = (name) => {
         if (name.trim() === "") {
@@ -30,8 +38,8 @@ function CharacterPage() {
         }
     };
 
+    if (loading)return (<Loading/>);
 
-    if (loading) return <div>Cargando ....</div>
 
     if (error && error !== "No se encontraron resultados") {
         return <div>Error: {error}</div>;
@@ -43,7 +51,13 @@ function CharacterPage() {
             <Buscador onSearch={search} />
             <h1>Personajes</h1>
             <DataTable columns={columns} id={id} rows={rows} />
+            <CustomModal
+                open={modalOpen}
+                onClose={handleCloseModal}
+                title="No se encontraron resultados"
+            />
         </Paper>
-    )
+    );
 }
+
 export default CharacterPage;

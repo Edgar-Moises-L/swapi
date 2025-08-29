@@ -7,29 +7,33 @@ export function useFetch(url) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let controller = new AbortController();
+  let controller = new AbortController();
 
-    const getData = async () => {
-      setLoading(true);
-      try {
-        const jsonData = await fetchData(url, controller);
-        if (jsonData?.data?.docs) {
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const jsonData = await fetchData(url, controller);
+      if (jsonData?.data?.docs) {
           setData(jsonData.data);
-        } else {
+          setLoading(false);
+
+      } else {
           setData({ docs: jsonData });
-        }
-
-        setError(null);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+          setLoading(false);
       }
-    };
 
-    getData();
-    return () => controller.abort();
-  }, [url]);
+      setError(null);
+    } catch (error) {
+      setTimeout(() => {
+        setError(error.message);
+        setLoading(false);
+      }, 1000);
+    }
+  };
+
+  getData();
+  return () => controller.abort();
+}, [url]);
 
   return { data, loading, error };
 }
