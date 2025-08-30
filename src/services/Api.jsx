@@ -16,3 +16,19 @@ export const fetchData = async (url, controller) => {
     throw error;
   }
 };
+
+
+export const deleteData = async (url) => {
+  try {
+    const response = await fetch(BASE_URL + url, {method: "DELETE"});
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error al eliminar");
+    }
+
+    return await response.json().catch(() => null);
+  } catch (error) {
+    throw error;
+  }
+};

@@ -10,6 +10,7 @@ import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
 
 function VehiclePage() {
+    const url_base = "/vehicles";
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [modalOpen, setModalOpen] = useState(false);
@@ -17,11 +18,15 @@ function VehiclePage() {
     const { data, loading, error } = useFetch(url);
     const id = "name";
     let rows = Array.isArray(data?.docs) ? data.docs : [];
+    
+    const refreshData = () => {
+        setUrl(`/vehicles?page=${page}&limit=${limit}&t=${Date.now()}`);
+    };
 
     useEffect(() => {
         if (error === "No se encontraron resultados") {
             setModalOpen(true);
-            setUrl(`/starships?page=${page}&limit=${limit}`);
+            refreshData();
         }
     }, [error]);
     const handleCloseModal = () => {
@@ -29,13 +34,13 @@ function VehiclePage() {
     };
     const search = (title) => {
         if (title.trim() === "") {
-            setUrl(`/starships?page=${page}&limit=${limit}`);
+            refreshData();
         } else {
-            setUrl(`/starships/search/${title}`);
+            setUrl(`/vehicles/search/${title}`);
         }
     };
 
-      if (loading)return (<Loading/>);
+    if (loading) return (<Loading />);
 
     if (error && error !== "No se encontraron resultados") {
         return <div>Error: {error}</div>;
@@ -46,8 +51,14 @@ function VehiclePage() {
             <Menu />
             <Buscador onSearch={search} />
             <h1>Veiculos</h1>
-            <DataTable columns={columns} id={id} rows={rows} />
-                        <CustomModal
+                 <DataTable
+                columns={columns}
+                id={id}
+                rows={rows}
+                url={url_base}
+                onDeleteSuccess={refreshData}
+            />
+            <CustomModal
                 open={modalOpen}
                 onClose={handleCloseModal}
                 title="No se encontraron resultados"

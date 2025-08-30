@@ -1,6 +1,6 @@
 export const speciesMap = (data) => {
     return data.map(species => ({
-        id: species._id,
+        _id: species._id,
         name: species.name,
         classification: species.classification,
         designation: species.designation,

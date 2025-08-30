@@ -2,6 +2,7 @@ import { columns } from './characterTableColumns.js';
 import { useEffect, useState } from 'react';
 import { characterMap } from './characterMap.js';
 import { useFetch } from '../../hooks/useFetch.jsx';
+
 import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
 import Paper from '@mui/material/Paper';
@@ -10,19 +11,23 @@ import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
 
 function CharacterPage() {
+    const url_base = "/characters";
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [url, setUrl] = useState(`/characters?page=${page}&limit=${limit}`);
     const [modalOpen, setModalOpen] = useState(false);
-
     const { data, loading, error } = useFetch(url);
     const id = "name";
     let rows = Array.isArray(data?.docs) ? characterMap(data.docs) : [];
 
+    const refreshData = () => {
+        setUrl(`/characters?page=${page}&limit=${limit}&t=${Date.now()}`);
+    };
+
     useEffect(() => {
         if (error === "No se encontraron resultados") {
             setModalOpen(true);
-            setUrl(`/characters?page=${page}&limit=${limit}`);
+            refreshData();
         }
     }, [error]);
 
@@ -32,13 +37,13 @@ function CharacterPage() {
 
     const search = (name) => {
         if (name.trim() === "") {
-            setUrl(`/characters?page=${page}&limit=${limit}`);
+            refreshData();
         } else {
             setUrl(`/characters/search/${name}`);
         }
     };
 
-    if (loading)return (<Loading/>);
+    if (loading) return (<Loading />);
 
 
     if (error && error !== "No se encontraron resultados") {
@@ -50,7 +55,13 @@ function CharacterPage() {
             <Menu />
             <Buscador onSearch={search} />
             <h1>Personajes</h1>
-            <DataTable columns={columns} id={id} rows={rows} />
+                 <DataTable
+                columns={columns}
+                id={id}
+                rows={rows}
+                url={url_base}
+                onDeleteSuccess={refreshData}
+            />
             <CustomModal
                 open={modalOpen}
                 onClose={handleCloseModal}

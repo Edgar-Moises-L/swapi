@@ -1,6 +1,6 @@
 export const planetsMap = (data) => {
     return data.map(planet => ({
-        id: planet._id,
+        _id: planet._id,
         name: planet.name,
         diameter: planet.diameter,
         rotation_period: planet.rotation_period,

@@ -2,14 +2,15 @@ import { columns } from './filmTableColumns.js'
 import { useEffect } from 'react';
 import { useFetch } from '../../hooks/useFetch.jsx';
 import { useState } from 'react';
+import Paper from '@mui/material/Paper';
 import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
-import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
 
 function FilmPage() {
+    const url_base = "/films";
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [url, setUrl] = useState(`/films?page=${page}&limit=${limit}`);
@@ -19,25 +20,30 @@ function FilmPage() {
     let rows = Array.isArray(data?.docs) ? data.docs : [];
     console.log(rows)
 
+    const refreshData = () => {
+        setUrl(`/films?page=${page}&limit=${limit}&t=${Date.now()}`);
+    };
+
     useEffect(() => {
         if (error === "No se encontraron resultados") {
             setModalOpen(true);
-            setUrl(`/films?page=${page}&limit=${limit}`);
+            refreshData()
         }
     }, [error]);
-        const handleCloseModal = () => {
+
+    const handleCloseModal = () => {
         setModalOpen(false);
     };
 
     const search = (title) => {
         if (title.trim() === "") {
-            setUrl(`/films?page=${page}&limit=${limit}`);
+            refreshData()
         } else {
             setUrl(`/films/search/${title}`);
         }
     };
 
-      if (loading)return (<Loading/>);
+    if (loading) return (<Loading />);
 
     if (error && error !== "No se encontraron resultados") {
         return <div>Error: {error}</div>;
@@ -48,8 +54,14 @@ function FilmPage() {
             <Menu />
             <h1>Peliculas</h1>
             <Buscador onSearch={search} />
-            <DataTable columns={columns} id={id} rows={rows} />
-                        <CustomModal
+            <DataTable
+                columns={columns}
+                id={id}
+                rows={rows}
+                url={url_base}
+                onDeleteSuccess={refreshData}
+            />
+            <CustomModal
                 open={modalOpen}
                 onClose={handleCloseModal}
                 title="No se encontraron resultados"

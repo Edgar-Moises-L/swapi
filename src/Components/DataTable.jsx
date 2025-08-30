@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import EliminarModal from './EliminarModal.jsx'
 
 
 
@@ -15,9 +16,12 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-function DataTable({ columns, id, rows }) {
+function DataTable({ columns, id, rows, url, onDeleteSuccess }) {
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [_id, set_id] = useState();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -37,11 +41,17 @@ function DataTable({ columns, id, rows }) {
   };
 
   const handleDelete = (row) => {
-    console.log('Eliminar', row);
+    setModalOpen(true);
+    set_id(row._id)
   };
 
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+
   return (
-    <Paper sx={{ m: 4,background: '#f0efeff3' }}>
+    <Paper sx={{ m: 4, background: '#f0efeff3' }}>
       <TableContainer sx={{ maxHeight: 1000 }}>
         <Table stickyHeader aria-label="tabla de personajes">
           <TableHead>
@@ -85,7 +95,6 @@ function DataTable({ columns, id, rows }) {
                         </TableCell>
                       );
                     }
-
                     return (
                       <TableCell //style={{ whiteSpace: 'normal', wordBreak: 'break-word' }} 
                         key={column.id} align={column.align}>
@@ -108,6 +117,12 @@ function DataTable({ columns, id, rows }) {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      <EliminarModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        url={`${url}/${_id}`}
+        onDeleteSuccess={onDeleteSuccess}
       />
 
     </Paper>

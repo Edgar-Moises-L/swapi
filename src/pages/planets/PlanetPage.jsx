@@ -11,6 +11,7 @@ import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
 
 function PlanetPage() {
+    const url_base = "/planets";
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [modalOpen, setModalOpen] = useState(false);
@@ -19,27 +20,31 @@ function PlanetPage() {
     const id = "name";
     let rows = Array.isArray(data?.docs) ? planetsMap(data.docs) : [];
 
+    const refreshData = () => {
+        setUrl(`/planets?page=${page}&limit=${limit}&t=${Date.now()}`);
+    };
+
     useEffect(() => {
         if (error === "No se encontraron resultados") {
             setModalOpen(true);
-            setUrl(`/planets?page=${page}&limit=${limit}`);
+            refreshData();
         }
     }, [error]);
-        const handleCloseModal = () => {
+    const handleCloseModal = () => {
         setModalOpen(false);
     };
 
     const search = (name) => {
         if (name.trim() === "") {
-            setUrl(`/planets?page=${page}&limit=${limit}`);
+            refreshData();
         } else {
             setUrl(`/planets/search/${name}`);
         }
     };
 
-       if (loading)return (<Loading/>);
+    if (loading) return (<Loading />);
 
-   if (error && error !== "No se encontraron resultados") {
+    if (error && error !== "No se encontraron resultados") {
         return <div>Error: {error}</div>;
     }
 
@@ -48,8 +53,14 @@ function PlanetPage() {
             <Menu />
             <Buscador onSearch={search} />
             <h1>Planetas</h1>
-            <DataTable columns={columns} id={id} rows={rows} />
-                        <CustomModal
+                <DataTable
+                columns={columns}
+                id={id}
+                rows={rows}
+                url={url_base}
+                onDeleteSuccess={refreshData}
+            />
+            <CustomModal
                 open={modalOpen}
                 onClose={handleCloseModal}
                 title="No se encontraron resultados"

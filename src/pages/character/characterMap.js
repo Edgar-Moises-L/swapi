@@ -1,6 +1,6 @@
 export const characterMap = (data) => {
     return data.map(character => ({
-        id: character._id,
+        _id: character._id,
         name: character.name,
         birth_year: character.birth_year,
         eye_color: character.eye_color,
