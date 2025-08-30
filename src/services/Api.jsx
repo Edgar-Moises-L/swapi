@@ -32,3 +32,46 @@ export const deleteData = async (url) => {
     throw error;
   }
 };
+
+
+export const postData = async (url, data) => {
+  try {
+    const response = await fetch(BASE_URL + url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error al agregar");
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const putData = async (url, data) => {
+  try {
+    const response = await fetch(BASE_URL + url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error al editar");
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
