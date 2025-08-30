@@ -50,8 +50,8 @@ function VehiclePage() {
         <Paper sx={{ m: 4, background: '#f0efeff3' }}>
             <Menu />
             <Buscador onSearch={search} />
-            <h1>Veiculos</h1>
-                 <DataTable
+            <DataTable
+                title = {"Veiculo"}
                 columns={columns}
                 id={id}
                 rows={rows}

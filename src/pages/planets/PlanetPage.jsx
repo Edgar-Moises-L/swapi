@@ -52,8 +52,8 @@ function PlanetPage() {
         <Paper sx={{ m: 4, background: '#f0efeff3' }}>
             <Menu />
             <Buscador onSearch={search} />
-            <h1>Planetas</h1>
-                <DataTable
+             <DataTable
+                title = {"Planeta"}
                 columns={columns}
                 id={id}
                 rows={rows}

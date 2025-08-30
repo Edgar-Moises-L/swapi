@@ -52,9 +52,9 @@ function FilmPage() {
     return (
         <Paper sx={{ m: 4, background: '#f0efeff3' }}>
             <Menu />
-            <h1>Peliculas</h1>
             <Buscador onSearch={search} />
             <DataTable
+                title = {"Pelicula"}
                 columns={columns}
                 id={id}
                 rows={rows}

@@ -51,7 +51,8 @@ function SpeciesPage() {
         <Paper sx={{ m: 4, background: '#f0efeff3' }}>
             <Menu />
             <Buscador onSearch={search} />
-            <h1>Especies</h1>     <DataTable
+             <DataTable
+                title = {"Especie"}
                 columns={columns}
                 id={id}
                 rows={rows}

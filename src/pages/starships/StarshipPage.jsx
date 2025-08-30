@@ -49,8 +49,8 @@ function StarshipPage() {
     return (
         <Paper sx={{ m: 4, background: '#f0efeff3' }}>
             <Menu /><Buscador onSearch={search} />
-            <h1>Naves Espaciales</h1>
-                <DataTable
+           <DataTable
+                title = {"Nave"}
                 columns={columns}
                 id={id}
                 rows={rows}
