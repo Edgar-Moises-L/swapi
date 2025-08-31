@@ -35,12 +35,24 @@ function CharacterPage() {
         setModalOpen(false);
     };
 
-    const search = (name) => {
-        if (name.trim() === "") {
-            refreshData();
+  const search = (title) => {
+        if (title.trim() === "") {
+            setPage(1);
+            setUrl(`/characters?page=1&limit=${limit}`);
         } else {
-            setUrl(`/characters/search/${name}`);
+            setPage(1);
+            setUrl(`/characters/search/${title}?page=1&limit=${limit}`);
         }
+    };
+       const handleChangePage = (newPage) => {
+        setPage(newPage);
+        setUrl(`/characters?page=${newPage}&limit=${limit}`);
+    };
+
+    const handleChangeRowsPerPage = (newLimit) => {
+        setLimit(newLimit);
+        setPage(1);
+        setUrl(`/characters?page=1&limit=${newLimit}`);
     };
 
     if (loading) return (<Loading />);
@@ -61,6 +73,11 @@ function CharacterPage() {
                 rows={rows}
                 url={url_base}
                 onDeleteSuccess={refreshData}
+                page={page}
+                rowsPerPage={limit}
+                totalRows={data?.totalDocs ?? 0}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
             />
             <CustomModal
                 open={modalOpen}

@@ -1,6 +1,6 @@
 import { columns } from './filmTableColumns.js'
-import { useEffect, useState} from 'react';
-import { useFetch } from '../../hooks/useFetch.jsx'; 
+import { useEffect, useState } from 'react';
+import { useFetch } from '../../hooks/useFetch.jsx';
 import Paper from '@mui/material/Paper';
 
 import DataTable from '../../Components/DataTable.jsx';
@@ -19,6 +19,7 @@ function FilmPage() {
     const { data, loading, error } = useFetch(url);
     const id = "title";
     let rows = Array.isArray(data?.docs) ? data.docs : [];
+    console.log("rows", rows, "meta", data)
 
     const refreshData = () => {
         setUrl(`/films?page=${page}&limit=${limit}&t=${Date.now()}`);
@@ -37,10 +38,23 @@ function FilmPage() {
 
     const search = (title) => {
         if (title.trim() === "") {
-            refreshData()
+            setPage(1);
+            setUrl(`/films?page=1&limit=${limit}`);
         } else {
-            setUrl(`/films/search/${title}`);
+            setPage(1);
+            setUrl(`/films/search/${title}?page=1&limit=${limit}`);
         }
+    };
+
+    const handleChangePage = (newPage) => {
+        setPage(newPage);
+        setUrl(`/films?page=${newPage}&limit=${limit}`);
+    };
+
+    const handleChangeRowsPerPage = (newLimit) => {
+        setLimit(newLimit);
+        setPage(1);
+        setUrl(`/films?page=1&limit=${newLimit}`);
     };
 
     if (loading) return (<Loading />);
@@ -54,13 +68,18 @@ function FilmPage() {
             <Menu />
             <Buscador onSearch={search} />
             <DataTable
-                title = {"Pelicula"}
+                title={"Pelicula"}
                 columns={columns}
                 id={id}
                 rows={rows}
                 url={url_base}
                 onDeleteSuccess={refreshData}
-                FormComponent = {FormComponent}
+                FormComponent={FormComponent}
+                page={page}
+                rowsPerPage={limit}
+                totalRows={data?.totalDocs ?? 0}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
             />
             <CustomModal
                 open={modalOpen}

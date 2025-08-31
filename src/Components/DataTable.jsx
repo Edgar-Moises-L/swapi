@@ -14,24 +14,25 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EliminarModal from './EliminarModal.jsx';
 
-
-
-function DataTable({ title, columns, id, rows, url, onDeleteSuccess, FormComponent }) {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+function DataTable({
+  title,
+  columns,
+  id,
+  rows = [],
+  url,
+  onDeleteSuccess,
+  FormComponent,
+  page = 1,
+  rowsPerPage = 10,
+  totalRows = 0,
+  onChangePage,
+  onChangeRowsPerPage,
+}) {
   const [modalOpen, setModalOpen] = useState(false);
   const [_id, set_id] = useState();
   const [formOpen, setFormOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [formMode, setFormMode] = useState("view");
-
-
-  const handleChangePage = (event, newPage) => setPage(newPage);
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
 
   const handleCreate = () => {
     setFormMode("create");
@@ -57,6 +58,16 @@ function DataTable({ title, columns, id, rows, url, onDeleteSuccess, FormCompone
 
   const handleCloseModal = () => setModalOpen(false);
 
+  const handlePageChange = (event, newPageZeroBased) => {
+    const newPageOneBased = newPageZeroBased + 1;
+    if (onChangePage) onChangePage(newPageOneBased);
+  };
+
+  const handleRowsPerPageChange = (event) => {
+    const newLimit = parseInt(event.target.value, 10);
+    if (onChangeRowsPerPage) onChangeRowsPerPage(newLimit);
+  };
+
   return (
     <Paper sx={{ m: 4, background: '#f0efeff3' }}>
       <h1>{title + "s"}</h1>
@@ -71,7 +82,6 @@ function DataTable({ title, columns, id, rows, url, onDeleteSuccess, FormCompone
           onDeleteSuccess={onDeleteSuccess}
         />
       )}
-
 
       <TableContainer sx={{ maxHeight: 1000 }}>
         <Table stickyHeader>
@@ -89,10 +99,15 @@ function DataTable({ title, columns, id, rows, url, onDeleteSuccess, FormCompone
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow hover tabIndex={-1} key={row[id]}>
+            {rows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} align="center">
+                  No hay datos
+                </TableCell>
+              </TableRow>
+            ) : (
+              rows.map((row) => (
+                <TableRow hover tabIndex={-1} key={row[id] ?? row._id}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     if (column.id === 'actions') {
@@ -112,24 +127,25 @@ function DataTable({ title, columns, id, rows, url, onDeleteSuccess, FormCompone
                     }
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number' ? column.format(value) : value}
+                        {column.format && typeof value === 'number' ? column.format(value) : (value ?? '')}
                       </TableCell>
                     );
                   })}
                 </TableRow>
-              ))}
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[10]}
+        rowsPerPageOptions={[10,15,20]}
         component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        count={totalRows}     
+        rowsPerPage={rowsPerPage}         
+        page={Math.max(0, page - 1)}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
       />
 
       <EliminarModal

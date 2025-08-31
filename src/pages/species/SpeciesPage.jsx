@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
+import FormComponent from './Formulario.jsx'
 
 function SpeciesPage() {
     const url_base = "/species";
@@ -19,6 +20,7 @@ function SpeciesPage() {
     const { data, loading, error } = useFetch(url);
     const id = "name";
     let rows = Array.isArray(data?.docs) ? speciesMap(data.docs) : [];
+    console.log(rows)
 
     const refreshData = () => {
         setUrl(`/species?page=${page}&limit=${limit}&t=${Date.now()}`);
@@ -33,12 +35,24 @@ function SpeciesPage() {
     const handleCloseModal = () => {
         setModalOpen(false);
     };
-    const search = (name) => {
-        if (name.trim() === "") {
-           refreshData();
+     const search = (title) => {
+        if (title.trim() === "") {
+            setPage(1);
+            setUrl(`/species?page=1&limit=${limit}`);
         } else {
-            setUrl(`/species/search/${name}`);
+            setPage(1);
+            setUrl(`/species/search/${title}?page=1&limit=${limit}`);
         }
+    };
+    const handleChangePage = (newPage) => {
+        setPage(newPage);
+        setUrl(`/species?page=${newPage}&limit=${limit}`);
+    };
+
+    const handleChangeRowsPerPage = (newLimit) => {
+        setLimit(newLimit);
+        setPage(1);
+        setUrl(`/species?page=1&limit=${newLimit}`);
     };
 
     if (loading) return (<Loading />);
@@ -51,13 +65,19 @@ function SpeciesPage() {
         <Paper sx={{ m: 4, background: '#f0efeff3' }}>
             <Menu />
             <Buscador onSearch={search} />
-             <DataTable
-                title = {"Especie"}
+            <DataTable
+                title={"Especie"}
                 columns={columns}
                 id={id}
                 rows={rows}
                 url={url_base}
                 onDeleteSuccess={refreshData}
+                FormComponent={FormComponent}
+                page={page}
+                rowsPerPage={limit}
+                totalRows={data?.totalDocs ?? 0}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
             />
             <CustomModal
                 open={modalOpen}

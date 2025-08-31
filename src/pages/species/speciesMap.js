@@ -10,6 +10,7 @@ export const speciesMap = (data) => {
         hair_color: species.hair_color,
         skin_color: species.skin_color,
         language: species.language,
-        homeworld: species.homeworld?.name || "Unknown"
+        homeworld: species.homeworld?.name || "Unknown",
+        homeworld_id: species.homeworld?._id
     }));
 }

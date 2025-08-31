@@ -37,10 +37,23 @@ function StarshipPage() {
 
     const search = (title) => {
         if (title.trim() === "") {
-            refreshData();
+            setPage(1);
+            setUrl(`/starships?page=1&limit=${limit}`);
         } else {
-            setUrl(`/starships/search/${title}`);
+            setPage(1);
+            setUrl(`/starships/search/${title}?page=1&limit=${limit}`);
         }
+    };
+
+    const handleChangePage = (newPage) => {
+        setPage(newPage);
+        setUrl(`/starships?page=${newPage}&limit=${limit}`);
+    };
+
+    const handleChangeRowsPerPage = (newLimit) => {
+        setLimit(newLimit);
+        setPage(1);
+        setUrl(`/starships?page=1&limit=${newLimit}`);
     };
 
     if (loading) return (<Loading />);
@@ -60,6 +73,11 @@ function StarshipPage() {
                 url={url_base}
                 onDeleteSuccess={refreshData}
                 FormComponent={FormComponent}
+                page={page}
+                rowsPerPage={limit}
+                totalRows={data?.totalDocs ?? 0}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
             />
             <CustomModal
                 open={modalOpen}

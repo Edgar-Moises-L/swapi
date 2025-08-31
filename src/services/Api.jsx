@@ -74,3 +74,17 @@ export const putData = async (url, data) => {
     throw error;
   }
 };
+
+export const fetchList = async (url) => {
+  try {
+    const response = await fetch(BASE_URL + url);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error desconocido");
+    }
+    const json = await response.json();
+    return json.data;
+  } catch (error) {
+    throw error;
+  }
+};

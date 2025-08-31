@@ -34,12 +34,25 @@ function PlanetPage() {
         setModalOpen(false);
     };
 
-    const search = (name) => {
-        if (name.trim() === "") {
-            refreshData();
+    const search = (title) => {
+        if (title.trim() === "") {
+            setPage(1);
+            setUrl(`/planets?page=1&limit=${limit}`);
         } else {
-            setUrl(`/planets/search/${name}`);
+            setPage(1);
+            setUrl(`/planets/search/${title}?page=1&limit=${limit}`);
         }
+    };
+
+    const handleChangePage = (newPage) => {
+        setPage(newPage);
+        setUrl(`/planets?page=${newPage}&limit=${limit}`);
+    };
+
+    const handleChangeRowsPerPage = (newLimit) => {
+        setLimit(newLimit);
+        setPage(1);
+        setUrl(`/planets?page=1&limit=${newLimit}`);
     };
 
     if (loading) return (<Loading />);
@@ -52,13 +65,18 @@ function PlanetPage() {
         <Paper sx={{ m: 4, background: '#f0efeff3' }}>
             <Menu />
             <Buscador onSearch={search} />
-             <DataTable
-                title = {"Planeta"}
+            <DataTable
+                title={"Planeta"}
                 columns={columns}
                 id={id}
                 rows={rows}
                 url={url_base}
                 onDeleteSuccess={refreshData}
+                page={page}
+                rowsPerPage={limit}
+                totalRows={data?.totalDocs ?? 0}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
             />
             <CustomModal
                 open={modalOpen}

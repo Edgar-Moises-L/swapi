@@ -19,7 +19,7 @@ function VehiclePage() {
     const { data, loading, error } = useFetch(url);
     const id = "name";
     let rows = Array.isArray(data?.docs) ? data.docs : [];
-    
+
     const refreshData = () => {
         setUrl(`/vehicles?page=${page}&limit=${limit}&t=${Date.now()}`);
     };
@@ -35,10 +35,22 @@ function VehiclePage() {
     };
     const search = (title) => {
         if (title.trim() === "") {
-            refreshData();
+            setPage(1);
+            setUrl(`/vehicles?page=1&limit=${limit}`);
         } else {
-            setUrl(`/vehicles/search/${title}`);
+            setPage(1);
+            setUrl(`/vehicles/search/${title}?page=1&limit=${limit}`);
         }
+    };
+    const handleChangePage = (newPage) => {
+        setPage(newPage);
+        setUrl(`/vehicles?page=${newPage}&limit=${limit}`);
+    };
+
+    const handleChangeRowsPerPage = (newLimit) => {
+        setLimit(newLimit);
+        setPage(1);
+        setUrl(`/vehicles?page=1&limit=${newLimit}`);
     };
 
     if (loading) return (<Loading />);
@@ -52,13 +64,18 @@ function VehiclePage() {
             <Menu />
             <Buscador onSearch={search} />
             <DataTable
-                title = {"Veiculo"}
+                title={"Veiculo"}
                 columns={columns}
                 id={id}
                 rows={rows}
                 url={url_base}
                 onDeleteSuccess={refreshData}
-                 FormComponent = {FormComponent}
+                FormComponent={FormComponent}
+                page={page}
+                rowsPerPage={limit}
+                totalRows={data?.totalDocs ?? 0}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
             />
             <CustomModal
                 open={modalOpen}
