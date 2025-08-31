@@ -11,6 +11,6 @@ export const columns = [
   { id: 'homeworld', label: 'Planeta Natal', minWidth: 50, align: 'center' },
   { id: 'species', label: 'Especie', minWidth: 20, align: 'center' },
   { id: 'starships', label: 'Naves Estelares', minWidth: 50, align: 'center' },
-  { id: 'vehicles', label: 'Vehículos', minWidth: 50, align: 'center' },
+ // { id: 'vehicles', label: 'Vehículos', minWidth: 50, align: 'center' },
   { id: 'actions', label: 'Acciones', minWidth: 120, align: 'center' },
 ];

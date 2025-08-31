@@ -17,7 +17,6 @@ export const fetchData = async (url, controller) => {
   }
 };
 
-
 export const deleteData = async (url) => {
   try {
     const response = await fetch(BASE_URL + url, {method: "DELETE"});

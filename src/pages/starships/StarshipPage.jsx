@@ -1,13 +1,14 @@
 import { columns } from './starshipsTableColumns.js'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFetch } from '../../hooks/useFetch.jsx';
-import { useState } from 'react';
+
 import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
 import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
+import FormComponent from './Formulario.jsx'
 
 function StarshipPage() {
     const url_base = "/starships";
@@ -26,12 +27,14 @@ function StarshipPage() {
     useEffect(() => {
         if (error === "No se encontraron resultados") {
             setModalOpen(true);
-           refreshData();
+            refreshData();
         }
     }, [error]);
+
     const handleCloseModal = () => {
         setModalOpen(false);
     };
+
     const search = (title) => {
         if (title.trim() === "") {
             refreshData();
@@ -49,13 +52,14 @@ function StarshipPage() {
     return (
         <Paper sx={{ m: 4, background: '#f0efeff3' }}>
             <Menu /><Buscador onSearch={search} />
-           <DataTable
-                title = {"Nave"}
+            <DataTable
+                title={"Nave"}
                 columns={columns}
                 id={id}
                 rows={rows}
                 url={url_base}
                 onDeleteSuccess={refreshData}
+                FormComponent={FormComponent}
             />
             <CustomModal
                 open={modalOpen}

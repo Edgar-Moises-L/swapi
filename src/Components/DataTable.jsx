@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Button } from "@mui/material"
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,40 +13,66 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EliminarModal from './EliminarModal.jsx';
-import RowDetailsDrawer from '../Components/DetailDrawer.jsx'
 
 
-function DataTable({ title, columns, id, rows, url, onDeleteSuccess }) {
+
+function DataTable({ title, columns, id, rows, url, onDeleteSuccess, FormComponent }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [modalOpen, setModalOpen] = useState(false);
   const [_id, set_id] = useState();
-
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [formMode, setFormMode] = useState("view");
+
 
   const handleChangePage = (event, newPage) => setPage(newPage);
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
-  const handleView = (row) => {
-    setSelectedRow(row);
-    setDrawerOpen(true);
+  const handleCreate = () => {
+    setFormMode("create");
+    setFormOpen(true);
   };
 
-  const handleEdit = (row) => console.log('Editar', row);
+  const handleView = (row) => {
+    setSelectedRow(row);
+    setFormMode("view");
+    setFormOpen(true);
+  };
+
+  const handleEdit = (row) => {
+    setSelectedRow(row);
+    setFormMode("edit");
+    setFormOpen(true);
+  };
+
   const handleDelete = (row) => {
     setModalOpen(true);
     set_id(row._id);
   };
+
   const handleCloseModal = () => setModalOpen(false);
-  const handleCloseDrawer = () => setDrawerOpen(false);
 
   return (
     <Paper sx={{ m: 4, background: '#f0efeff3' }}>
       <h1>{title + "s"}</h1>
+      <Button variant="contained" onClick={() => handleCreate()}>+ Agregar</Button>
+
+      {FormComponent && (
+        <FormComponent
+          open={formOpen}
+          onClose={() => setFormOpen(false)}
+          initialValues={selectedRow}
+          mode={formMode}
+          onDeleteSuccess={onDeleteSuccess}
+        />
+      )}
+
+
       <TableContainer sx={{ maxHeight: 1000 }}>
         <Table stickyHeader>
           <TableHead>
@@ -110,13 +137,6 @@ function DataTable({ title, columns, id, rows, url, onDeleteSuccess }) {
         onClose={handleCloseModal}
         url={`${url}/${_id}`}
         onDeleteSuccess={onDeleteSuccess}
-      />
-      <RowDetailsDrawer
-        open={drawerOpen}
-        onClose={handleCloseDrawer}
-        row={selectedRow}
-        columns={columns}
-        title={title}
       />
 
     </Paper>

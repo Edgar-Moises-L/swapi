@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
+import FormComponent from './Formulario.jsx'
 
 function VehiclePage() {
     const url_base = "/vehicles";
@@ -57,6 +58,7 @@ function VehiclePage() {
                 rows={rows}
                 url={url_base}
                 onDeleteSuccess={refreshData}
+                 FormComponent = {FormComponent}
             />
             <CustomModal
                 open={modalOpen}

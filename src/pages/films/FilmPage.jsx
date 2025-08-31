@@ -1,13 +1,14 @@
 import { columns } from './filmTableColumns.js'
-import { useEffect } from 'react';
-import { useFetch } from '../../hooks/useFetch.jsx';
-import { useState } from 'react';
+import { useEffect, useState} from 'react';
+import { useFetch } from '../../hooks/useFetch.jsx'; 
 import Paper from '@mui/material/Paper';
+
 import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
+import FormComponent from './Formulario.jsx'
 
 function FilmPage() {
     const url_base = "/films";
@@ -18,7 +19,6 @@ function FilmPage() {
     const { data, loading, error } = useFetch(url);
     const id = "title";
     let rows = Array.isArray(data?.docs) ? data.docs : [];
-    console.log(rows)
 
     const refreshData = () => {
         setUrl(`/films?page=${page}&limit=${limit}&t=${Date.now()}`);
@@ -60,6 +60,7 @@ function FilmPage() {
                 rows={rows}
                 url={url_base}
                 onDeleteSuccess={refreshData}
+                FormComponent = {FormComponent}
             />
             <CustomModal
                 open={modalOpen}
