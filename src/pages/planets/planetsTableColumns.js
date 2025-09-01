@@ -6,7 +6,7 @@ export const columns = [
   { id: 'gravity', label: 'Gravedad', minWidth: 100, align: 'center' },
   { id: 'surface_water', label: 'Agua Superficial', minWidth: 100, align: 'center' },
   { id: 'population', label: 'Población', minWidth: 100, align: 'center' },
-  { id: 'residents', label: 'Residentes', minWidth: 150, align: 'center' },
+ // { id: 'residents', label: 'Residentes', minWidth: 150, align: 'center' },
   { id: 'climate', label: 'Clima', minWidth: 120, align: 'center' },
   { id: 'terrain', label: 'Terreno', minWidth: 120, align: 'center' },
   { id: 'actions', label: 'Acciones', minWidth: 130, align: 'center' },

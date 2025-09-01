@@ -32,6 +32,7 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
             refreshData();
         }
     };
+    
 
     const onSubmit = async (data) => {
         try {

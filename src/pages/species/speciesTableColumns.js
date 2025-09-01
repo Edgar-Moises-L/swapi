@@ -8,6 +8,6 @@ export const columns = [
   { id: 'hair_color', label: 'Color de Cabello', minWidth: 100, align: 'center' },
   { id: 'skin_color', label: 'Color de Piel', minWidth: 100, align: 'center' },
   { id: 'language', label: 'Idioma', minWidth: 100, align: 'center' },
-  { id: 'homeworld', label: 'Planeta Natal', minWidth: 150, align: 'center' },
+  //{ id: 'homeworld', label: 'Planeta Natal', minWidth: 150, align: 'center' },
   { id: 'actions', label: 'Acciones', minWidth: 130, align: 'center' },
 ];

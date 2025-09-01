@@ -1,17 +1,28 @@
 import { useState } from 'react';
-import { Button } from "@mui/material"
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import IconButton from '@mui/material/IconButton';
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  IconButton,
+  Typography,
+  Stack,
+  Avatar,
+  Tooltip
+} from "@mui/material";
+
+import AddIcon from '@mui/icons-material/Add';
+import StorageIcon from '@mui/icons-material/Storage';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 import EliminarModal from './EliminarModal.jsx';
 
 function DataTable({
@@ -27,6 +38,7 @@ function DataTable({
   totalRows = 0,
   onChangePage,
   onChangeRowsPerPage,
+  searchComponent,
 }) {
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -54,7 +66,7 @@ function DataTable({
 
   const handleDelete = (row) => {
     setModalOpen(true);
-    set_id(row._id);
+    set_id(row._id ?? row[id]);
   };
 
   const handleCloseModal = () => setModalOpen(false);
@@ -70,39 +82,95 @@ function DataTable({
   };
 
   return (
-    <Paper sx={{ m: 4, background: '#f0efeff3' }}>
-      <h1>{title + "s"}</h1>
-      <Button variant="contained" onClick={() => handleCreate()}>+ Agregar</Button>
+    <Paper
+      elevation={6}
+      sx={{
+        m: 9,
+        borderRadius: 2,
+        p: 0,
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          px: 3,
+          py: 2,
+          
+        }}
+      >
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Avatar sx={{ bgcolor: '#3b5bd3', width: 44, height: 44 }}>
+            <StorageIcon />
+          </Avatar>
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              {title}
+            </Typography>
+          </Box>
+        </Stack>
 
-      {FormComponent && (
-        <FormComponent
-          open={formOpen}
-          onClose={() => setFormOpen(false)}
-          initialValues={selectedRow}
-          mode={formMode}
-          refreshData={refreshData}
-        />
-      )}
-      <TableContainer sx={{ maxHeight: 1000 }}>
+        <Stack direction="row" spacing={1}>
+          <Button
+            startIcon={<AddIcon />}
+            onClick={handleCreate}
+            sx={{
+              textTransform: 'none',
+              borderRadius: 6,
+              boxShadow: 'none',
+              px: 2,
+              bgcolor: '#eef2ff',
+              color: '#3b5bd3',
+              '&:hover': { bgcolor: '#e3e8ff' }
+            }}
+          >
+            Agregar registro
+          </Button>
+
+        </Stack>
+
+      </Box>
+{searchComponent && (
+          <Box sx={{
+            width: '100%',
+            mt: 1,
+            display: 'flex',
+            justifyContent: 'flex-end',
+            px: 1
+          }}>
+            {searchComponent}
+          </Box>
+        )}
+      <TableContainer sx={{ maxHeight: 520 }}>
+        
         <Table stickyHeader>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{ height: 60 }}>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth, backgroundColor: '#b0ccd3e3', fontWeight: 'bold' }}
+                  sx={{
+                    backgroundColor: '#33409E',
+                    color: '#fff',
+                    fontSize: 14,
+                  }}
                 >
                   {column.label}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
+
           <TableBody>
             {rows.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={columns.length} align="center">
-                  No hay datos
+              <TableRow sx={{ height: 360 }}>
+                <TableCell colSpan={columns.length} align="center" sx={{ borderBottom: 'none' }}>
+                  <Typography variant="h6" sx={{ color: '#cfcfcf', fontWeight: 700 }}>
+                    No existen registros
+                  </Typography>
                 </TableCell>
               </TableRow>
             ) : (
@@ -112,21 +180,56 @@ function DataTable({
                     const value = row[column.id];
                     if (column.id === 'actions') {
                       return (
-                        <TableCell key={column.id} align={column.align}>
-                          <IconButton color="primary" onClick={() => handleView(row)}>
-                            <VisibilityIcon />
-                          </IconButton>
-                          <IconButton color="primary" onClick={() => handleEdit(row)}>
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton color="error" onClick={() => handleDelete(row)}>
-                            <DeleteIcon />
-                          </IconButton>
+                        <TableCell key={column.id} align={column.align} sx={{ px: 2 }}>
+                          <Tooltip title="Ver">
+                            <IconButton
+                              onClick={() => handleView(row)}
+                              size="small"
+                              sx={{
+                                bgcolor: '#eef6ff',
+                                width: 36,
+                                height: 36,
+                                mr: 1
+                              }}
+                            >
+                              <VisibilityIcon sx={{ fontSize: 18, color: '#286cffff' }} />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Tooltip title="Editar">
+                            <IconButton
+                              onClick={() => handleEdit(row)}
+                              size="small"
+                              sx={{
+                                bgcolor: '#fff7ed',
+                                width: 36,
+                                height: 36,
+                                mr: 1
+                              }}
+                            >
+                              <EditIcon sx={{ fontSize: 18, color: '#db7a00' }} />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Tooltip title="Eliminar">
+                            <IconButton
+                              onClick={() => handleDelete(row)}
+                              size="small"
+                              sx={{
+                                bgcolor: '#fff5f5',
+                                width: 36,
+                                height: 36
+                              }}
+                            >
+                              <DeleteIcon sx={{ fontSize: 18, color: '#ff4c4cff' }} />
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                       );
                     }
+
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell key={column.id} align={column.align} sx={{ px: 3, py: 2 }}>
                         {column.format && typeof value === 'number' ? column.format(value) : (value ?? '')}
                       </TableCell>
                     );
@@ -138,15 +241,24 @@ function DataTable({
         </Table>
       </TableContainer>
 
-      <TablePagination
-        rowsPerPageOptions={[10]}
-        component="div"
-        count={totalRows}     
-        rowsPerPage={rowsPerPage}         
-        page={Math.max(0, page - 1)}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleRowsPerPageChange}
-      />
+      <Box
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          p: 2,
+        }}
+      >
+        <TablePagination
+          rowsPerPageOptions={[10]}
+          component="div"
+          count={totalRows}
+          rowsPerPage={rowsPerPage}
+          page={Math.max(0, page - 1)}
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handleRowsPerPageChange}
+          labelRowsPerPage={''}
+        />
+      </Box>
 
       <EliminarModal
         open={modalOpen}
@@ -155,6 +267,15 @@ function DataTable({
         refreshData={refreshData}
       />
 
+      {FormComponent && (
+        <FormComponent
+          open={formOpen}
+          onClose={() => setFormOpen(false)}
+          initialValues={selectedRow}
+          mode={formMode}
+          refreshData={refreshData}
+        />
+      )}
     </Paper>
   );
 }

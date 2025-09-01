@@ -1,7 +1,6 @@
 import { columns } from './vehiclesTableColumns.js'
 import { useFetch } from '../../hooks/useFetch.jsx';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
 import Paper from '@mui/material/Paper';
@@ -60,9 +59,8 @@ function VehiclePage() {
     }
 
     return (
-        <Paper sx={{ m: 4, background: '#f0efeff3' }}>
+        < >
             <Menu />
-            <Buscador onSearch={search} />
             <DataTable
                 title={"Veiculo"}
                 columns={columns}
@@ -76,13 +74,14 @@ function VehiclePage() {
                 totalRows={data?.totalDocs ?? 0}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
+                searchComponent={<Buscador onSearch={search} />}
             />
             <CustomModal
                 open={modalOpen}
                 onClose={handleCloseModal}
                 title="No se encontraron resultados"
             />
-        </Paper>
+        </>
     )
 }
 export default VehiclePage;

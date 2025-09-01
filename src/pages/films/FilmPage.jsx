@@ -1,8 +1,6 @@
 import { columns } from './filmTableColumns.js'
 import { useEffect, useState } from 'react';
 import { useFetch } from '../../hooks/useFetch.jsx';
-import Paper from '@mui/material/Paper';
-
 import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
 import Buscador from '../../Components/Buscador.jsx';
@@ -64,11 +62,10 @@ function FilmPage() {
     }
 
     return (
-        <Paper sx={{ m: 4, background: '#f0efeff3' }}>
+        <>
             <Menu />
-            <Buscador onSearch={search} />
             <DataTable
-                title={"Pelicula"}
+                title="Peliculas"
                 columns={columns}
                 id={id}
                 rows={rows}
@@ -80,13 +77,15 @@ function FilmPage() {
                 totalRows={data?.totalDocs ?? 0}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
+                searchComponent={<Buscador onSearch={search} />}
             />
+
             <CustomModal
                 open={modalOpen}
                 onClose={handleCloseModal}
                 title="No se encontraron resultados"
             />
-        </Paper>
+        </>
     )
 }
 

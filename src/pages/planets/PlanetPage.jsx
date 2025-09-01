@@ -1,11 +1,9 @@
 import { columns } from './planetsTableColumns.js'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { planetsMap } from './PlanetMap.js'
 import { useFetch } from '../../hooks/useFetch.jsx';
-import { useState } from 'react';
 import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
-import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
@@ -31,6 +29,7 @@ function PlanetPage() {
             refreshData();
         }
     }, [error]);
+
     const handleCloseModal = () => {
         setModalOpen(false);
     };
@@ -63,11 +62,10 @@ function PlanetPage() {
     }
 
     return (
-        <Paper sx={{ m: 4, background: '#f0efeff3' }}>
+        <>
             <Menu />
-            <Buscador onSearch={search} />
             <DataTable
-                title={"Planeta"}
+                title={"Planetas"}
                 columns={columns}
                 id={id}
                 rows={rows}
@@ -79,13 +77,14 @@ function PlanetPage() {
                 totalRows={data?.totalDocs ?? 0}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
+                 searchComponent={<Buscador onSearch={search} />}
             />
             <CustomModal
                 open={modalOpen}
                 onClose={handleCloseModal}
                 title="No se encontraron resultados"
             />
-        </Paper>
+        </>
     )
 }
 export default PlanetPage;

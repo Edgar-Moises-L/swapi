@@ -2,10 +2,8 @@ import { columns } from './characterTableColumns.js';
 import { useEffect, useState } from 'react';
 import { characterMap } from './characterMap.js';
 import { useFetch } from '../../hooks/useFetch.jsx';
-
 import DataTable from '../../Components/DataTable.jsx';
 import Menu from '../../Components/Menu.jsx';
-import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
@@ -64,9 +62,8 @@ function CharacterPage() {
     }
 
     return (
-        <Paper sx={{ m: 4, background: '#f0efeff3' }}>
+        <>
             <Menu />
-            <Buscador onSearch={search} />
             <DataTable
                 title={"Personaje"}
                 columns={columns}
@@ -80,13 +77,14 @@ function CharacterPage() {
                 totalRows={data?.totalDocs ?? 0}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
+                searchComponent={<Buscador onSearch={search} />}
             />
             <CustomModal
                 open={modalOpen}
                 onClose={handleCloseModal}
                 title="No se encontraron resultados"
             />
-        </Paper>
+        </>
     );
 }
 

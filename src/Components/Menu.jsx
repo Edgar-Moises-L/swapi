@@ -16,7 +16,8 @@ import PublicIcon from "@mui/icons-material/Public";
 import PetsIcon from "@mui/icons-material/Pets";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import MenuIcon from "@mui/icons-material/Menu";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 export default function SideMenu() {
   const navigate = useNavigate();
@@ -42,21 +43,29 @@ export default function SideMenu() {
     <Drawer
       variant="permanent"
       sx={{
-        width: open ? 200 : 60,
+        width: open ? 200 : 50,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: open ? 200 : 60,
+          width: open ? 200 : 50,
           boxSizing: "border-box",
-          transition: "width 0.3s",
+          backgroundColor: "#000",
+          color: "#fff",
           overflowX: "hidden",
+          display: "flex",
+          flexDirection: "column",
         },
+
       }}
     >
       <Box sx={{ mt: 1, display: "flex", justifyContent: open ? "flex-end" : "center", px: 1 }}>
-        <IconButton onClick={() => setOpen(!open)}>
-          <MenuIcon />
+        <IconButton
+          onClick={() => setOpen(!open)}
+          sx={{ color: "#020202ff", backgroundColor: "#fffdfdff", borderRadius: "50%", "&:hover": { backgroundColor: "#333" } }}
+        >
+          {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>
       </Box>
+
 
       <Box sx={{ mt: 2 }}>
         <List>
@@ -75,6 +84,7 @@ export default function SideMenu() {
               >
                 <ListItemIcon
                   sx={{
+                    color: "#fff",
                     minWidth: 0,
                     mr: open ? 2 : "auto",
                     justifyContent: "center",

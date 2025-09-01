@@ -124,6 +124,14 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
             });
         }
     };
+    const handleCloseConfirmationModal = () => {
+        const wasSuccess = modalInfo.success;
+        setModalInfo((prev) => ({ ...prev, open: false }));
+        if (wasSuccess && typeof refreshData === "function") {
+            refreshData();
+        }
+    };
+
 
     const { handleSubmit, handleChange, setFieldValue, values, errors, resetForm } = useFormik({
         initialValues: mode === "create" ? defaultValues : { ...defaultValues, ...initialValues },
@@ -372,13 +380,17 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                     </form>
                 </Offcanvas.Body>
             </Offcanvas>
-            
-            <Modal show={modalInfo.open} onHide={() => setModalInfo({ ...modalInfo, open: false })} centered>
+            <Modal
+                show={modalInfo.open}
+                onHide={handleCloseConfirmationModal}
+                centered
+            >
                 <Modal.Header closeButton>
                     <Modal.Title>{modalInfo.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>{modalInfo.message}</Modal.Body>
             </Modal>
+
         </>
     );
 };
