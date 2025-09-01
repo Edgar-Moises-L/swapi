@@ -10,9 +10,14 @@ export const characterMap = (data) => {
         mass: character.mass,
         skin_color: character.skin_color,
         homeworld: character.homeworld?.name || "Unknown",
+        homeworld_id: character.homeworld?._id || "Unknown",
         species: character.species?.name || "Unknown",
+        species_id: character.species?._id || "Unknown",
         films: character.films?.map(f => f.title).join(", ") || "None",
+        films_id: character.films?.map(f => f._id) || "None",
         starships: character.starships?.map(s => s.name).join(", ") || "None",
-        vehicles: character.vehicles?.map(v => v.name).join(", ") || "None"
+        starships_id: character.starships?.map(s => s._id) || "None",
+        vehicles: character.vehicles?.map(v => v.name).join(", ") || "None",
+        vehicles_id: character.vehicles?.map(v => v._id) || "None"
     }));
 }

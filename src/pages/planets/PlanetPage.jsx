@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
+import FormComponent from './Formulario.jsx'
 
 function PlanetPage() {
     const url_base = "/planets";
@@ -71,7 +72,8 @@ function PlanetPage() {
                 id={id}
                 rows={rows}
                 url={url_base}
-                onDeleteSuccess={refreshData}
+                refreshData={refreshData}
+                FormComponent={FormComponent}
                 page={page}
                 rowsPerPage={limit}
                 totalRows={data?.totalDocs ?? 0}

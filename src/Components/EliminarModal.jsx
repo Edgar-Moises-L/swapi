@@ -1,12 +1,12 @@
 import { Modal, Box, Typography, Button } from '@mui/material';
 import { deleteData } from '../services/Api.jsx';
 
-function EliminarModal({ open, onClose, url, onDeleteSuccess }) {
+function EliminarModal({ open, onClose, url, refreshData }) {
  const handleConfirmDelete = async () => {
   try {
     await deleteData(url);   
     onClose(); 
-    if (onDeleteSuccess) onDeleteSuccess();
+    if (refreshData) refreshData();
   } catch (error) {
     console.error("Error eliminando:", error.message);
   }

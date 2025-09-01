@@ -10,6 +10,8 @@ export const planetsMap = (data) => {
         population: planet.population,
         climate: planet.climate,
         terrain: planet.terrain,
-        residents: planet.residents?.map(r => r.name).join(", ") || []
+        residents: planet.residents?.map(r => r.name).join(", ") || [],
+        residents_id: planet.residents?.map(r => r._id) || []
+
     }));
 }

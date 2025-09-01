@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { putData, postData } from '../../services/Api.jsx';
 import { Modal } from 'react-bootstrap';
 
-const Formulario = ({ open, onClose, initialValues, mode, onDeleteSuccess }) => {
+const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
     const [showOffcanvas, setShowOffcanvas] = useState(open);
     const [modalInfo, setModalInfo] = useState({
         open: false,
@@ -33,8 +33,8 @@ const Formulario = ({ open, onClose, initialValues, mode, onDeleteSuccess }) => 
     const handleCloseConfirmationModal = () => {
         const wasSuccess = modalInfo.success;
         setModalInfo(prev => ({ ...prev, open: false }));
-        if (wasSuccess && typeof onDeleteSuccess === "function") {
-            onDeleteSuccess();
+        if (wasSuccess && typeof refreshData === "function") {
+            refreshData();
         }
     };
 

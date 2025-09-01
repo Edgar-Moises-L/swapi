@@ -20,7 +20,7 @@ function DataTable({
   id,
   rows = [],
   url,
-  onDeleteSuccess,
+  refreshData,
   FormComponent,
   page = 1,
   rowsPerPage = 10,
@@ -28,6 +28,7 @@ function DataTable({
   onChangePage,
   onChangeRowsPerPage,
 }) {
+
   const [modalOpen, setModalOpen] = useState(false);
   const [_id, set_id] = useState();
   const [formOpen, setFormOpen] = useState(false);
@@ -79,10 +80,9 @@ function DataTable({
           onClose={() => setFormOpen(false)}
           initialValues={selectedRow}
           mode={formMode}
-          onDeleteSuccess={onDeleteSuccess}
+          refreshData={refreshData}
         />
       )}
-
       <TableContainer sx={{ maxHeight: 1000 }}>
         <Table stickyHeader>
           <TableHead>
@@ -139,7 +139,7 @@ function DataTable({
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[10,15,20]}
+        rowsPerPageOptions={[10]}
         component="div"
         count={totalRows}     
         rowsPerPage={rowsPerPage}         
@@ -152,7 +152,7 @@ function DataTable({
         open={modalOpen}
         onClose={handleCloseModal}
         url={`${url}/${_id}`}
-        onDeleteSuccess={onDeleteSuccess}
+        refreshData={refreshData}
       />
 
     </Paper>

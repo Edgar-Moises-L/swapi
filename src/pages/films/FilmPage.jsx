@@ -73,7 +73,7 @@ function FilmPage() {
                 id={id}
                 rows={rows}
                 url={url_base}
-                onDeleteSuccess={refreshData}
+                refreshData={refreshData}
                 FormComponent={FormComponent}
                 page={page}
                 rowsPerPage={limit}

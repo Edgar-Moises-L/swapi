@@ -12,7 +12,6 @@ export const router = createBrowserRouter([
     { path: "/films", element: <FilmPage /> },
     { path: "/planets", element: <PlanetPage /> },
     { path: "/species", element: <SpeciesPage /> },
-
     { path: "/starships", element: <StarshipPage /> },
     { path: "/vehicles", element: <VehiclePage /> },
     { path: "*", element: <Navigate to={"/characters"} /> },

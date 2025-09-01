@@ -7,10 +7,10 @@ export const columns = [
   { id: 'height', label: 'Altura', minWidth: 60, align: 'center' },
   { id: 'mass', label: 'Peso', minWidth: 60, align: 'center' },
   { id: 'skin_color', label: 'Color de Piel', minWidth: 80, align: 'center' },
-  { id: 'films', label: 'Películas', minWidth: 50, align: 'center' },
+// { id: 'films', label: 'Películas', minWidth: 50, align: 'center' },
   { id: 'homeworld', label: 'Planeta Natal', minWidth: 50, align: 'center' },
   { id: 'species', label: 'Especie', minWidth: 20, align: 'center' },
-  { id: 'starships', label: 'Naves Estelares', minWidth: 50, align: 'center' },
- // { id: 'vehicles', label: 'Vehículos', minWidth: 50, align: 'center' },
+ // { id: 'starships', label: 'Naves Estelares', minWidth: 50, align: 'center' },
+// { id: 'vehicles', label: 'Vehículos', minWidth: 50, align: 'center' },
   { id: 'actions', label: 'Acciones', minWidth: 120, align: 'center' },
 ];

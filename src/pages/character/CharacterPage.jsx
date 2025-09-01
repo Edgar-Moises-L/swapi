@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
+import FormComponent from './Formulario.jsx'
 
 function CharacterPage() {
     const url_base = "/characters";
@@ -35,7 +36,7 @@ function CharacterPage() {
         setModalOpen(false);
     };
 
-  const search = (title) => {
+    const search = (title) => {
         if (title.trim() === "") {
             setPage(1);
             setUrl(`/characters?page=1&limit=${limit}`);
@@ -44,7 +45,7 @@ function CharacterPage() {
             setUrl(`/characters/search/${title}?page=1&limit=${limit}`);
         }
     };
-       const handleChangePage = (newPage) => {
+    const handleChangePage = (newPage) => {
         setPage(newPage);
         setUrl(`/characters?page=${newPage}&limit=${limit}`);
     };
@@ -66,13 +67,14 @@ function CharacterPage() {
         <Paper sx={{ m: 4, background: '#f0efeff3' }}>
             <Menu />
             <Buscador onSearch={search} />
-             <DataTable
-                title = {"Personaje"}
+            <DataTable
+                title={"Personaje"}
                 columns={columns}
                 id={id}
                 rows={rows}
                 url={url_base}
-                onDeleteSuccess={refreshData}
+                refreshData={refreshData}
+                FormComponent={FormComponent}
                 page={page}
                 rowsPerPage={limit}
                 totalRows={data?.totalDocs ?? 0}
