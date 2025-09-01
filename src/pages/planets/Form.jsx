@@ -1,12 +1,15 @@
-import { TextField, Button, Grid, Select, MenuItem, FormHelperText, InputLabel, FormControl, Checkbox, ListItemText } from "@mui/material";
+import { TextField, Button, Grid, Select, MenuItem, FormHelperText, InputLabel, FormControl, Checkbox, ListItemText, Box, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useState, useEffect } from 'react';
 import { putData, postData, fetchList } from '../../services/Api.jsx';
 import { Modal } from 'react-bootstrap';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import PublicIcon from "@mui/icons-material/Public";
 
-const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
+const FormPlanet = ({ open, onClose, initialValues, mode, refreshData }) => {
   const [showOffcanvas, setShowOffcanvas] = useState(open);
   const [residents, setResidents] = useState([]);
   const [modalInfo, setModalInfo] = useState({
@@ -60,7 +63,7 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
   };
 
 
-  
+
   const onSubmit = async (formValues) => {
     try {
       const payload = {
@@ -109,13 +112,13 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
 
 
   const { handleSubmit, handleChange, setFieldValue, errors, values, resetForm } = useFormik({
-  initialValues: mode === "create"
-    ? defaultValues
-    : { ...defaultValues, ...initialValues },
-  enableReinitialize: true,
-  validationSchema,
-  onSubmit,
-});
+    initialValues: mode === "create"
+      ? defaultValues
+      : { ...defaultValues, ...initialValues },
+    enableReinitialize: true,
+    validationSchema,
+    onSubmit,
+  });
 
   useEffect(() => {
     if (mode === "create") {
@@ -133,7 +136,7 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
   }, [mode, initialValues, resetForm]);
 
   const title = mode === "create" ? "Crear planeta" : mode === "view" ? "Ver planeta" : mode === "edit" ? "Editar planeta" : "Planeta";
-  
+
   const getResidentName = (id) => {
     const r = residents.find(x => x._id === id);
     return r ? r.name : id;
@@ -149,15 +152,20 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
 
   return (
     <>
-      <Offcanvas show={showOffcanvas} onHide={() => { setShowOffcanvas(false); if (typeof onClose === "function") onClose(); }} placement="end">
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>{title}</Offcanvas.Title>
+      <Offcanvas show={showOffcanvas} onHide={() => { setShowOffcanvas(false); if (typeof onClose === "function") onClose(); }} placement="end" style={{ width: 500 }}>
+        <Offcanvas.Header closeButton style={{ borderBottom: "none", paddingBottom: 8 }} >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, width: "100%", justifyContent: "space-between" }}>
+            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+              <PublicIcon sx={{ color: '#3b5bd3' }} />
+              <Typography variant="h6" sx={{ fontWeight: 700, color: '#3b5bd3' }}>{title}</Typography>
+            </Box>
+          </Box>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <form onSubmit={handleSubmit}>
-            <Grid container direction="column" alignContent={"center"} justifyContent={"space-evenly"} spacing={2} sx={{ width: "100%" }}>
+            <Grid container spacing={2} >
 
-              <Grid item xs={12} md={8}>
+              <Grid item xs={12} md={12}>
                 <TextField
                   label="Nombre"
                   name="name"
@@ -170,7 +178,7 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={8}>
+              <Grid item xs={12} md={6}>
                 <TextField
                   label="Diámetro"
                   name="diameter"
@@ -262,6 +270,7 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
               </Grid>
 
               <Grid item xs={12} md={8}>
+                Terreno
                 <TextField
                   label="Terreno"
                   name="terrain"
@@ -274,7 +283,8 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={8}>
+              <Grid item xs={12} md={12}>
+                Residentes
                 <FormControl fullWidth error={!!errors.residents_id} disabled={mode === "view"}>
                   <InputLabel id="residents-label">Residentes</InputLabel>
                   <Select
@@ -299,15 +309,25 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
 
             </Grid>
 
-            {mode === "view" ? (
-              <Button type="button" variant="contained" sx={{ mt: 2 }} onClick={() => { setShowOffcanvas(false); if (typeof onClose === "function") onClose(); }}>
-                Cerrar
-              </Button>
-            ) : (
-              <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-                Guardar
-              </Button>
-            )}
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              {mode === "view" ? (
+                <Button
+                  type="button"
+                  variant="contained"
+                  onClick={() => {
+                    setShowOffcanvas(false);
+                    if (typeof onClose === "function") onClose();
+                  }}
+                >
+                  Cerrar
+                </Button>
+              ) : (
+                <Button type="submit" variant="contained">
+                  Guardar
+                </Button>
+              )}
+            </Box>
+
           </form>
         </Offcanvas.Body>
       </Offcanvas>
@@ -316,12 +336,22 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
         <Modal.Header closeButton>
           <Modal.Title>{modalInfo.title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          {modalInfo.message}
+
+        <Modal.Body className="text-center">
+          {modalInfo.success ? (
+            <CheckCircleIcon sx={{ fontSize: 60, color: "#1976d2", marginBottom: 2 }} />
+          ) : (
+            <ErrorIcon sx={{ fontSize: 60, color: "red", marginBottom: 2 }} />
+          )}
+
+          <p style={{ fontSize: "16px", color: "#333", marginTop: "10px" }}>
+            {modalInfo.message}
+          </p>
         </Modal.Body>
       </Modal>
+
     </>
   );
 };
 
-export default Formulario;
+export default FormPlanet;

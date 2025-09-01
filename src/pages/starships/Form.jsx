@@ -1,12 +1,15 @@
-import { TextField, Button, Grid } from "@mui/material";
+import { TextField, Button, Grid, Box, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useState, useEffect } from 'react';
 import { putData, postData } from '../../services/Api.jsx';
 import { Modal } from 'react-bootstrap';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
-const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => {
+const FormStarship = ({ open, onClose, initialValues, mode, refreshData }) => {
     const [showOffcanvas, setShowOffcanvas] = useState(open);
     const [modalInfo, setModalInfo] = useState({
         open: false,
@@ -117,14 +120,19 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
 
     return (
         <>
-            <Offcanvas show={showOffcanvas} onHide={() => { setShowOffcanvas(false); if (typeof onClose === "function") onClose(); }} placement="end">
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>{title}</Offcanvas.Title>
+    <Offcanvas show={showOffcanvas} onHide={() => { setShowOffcanvas(false); if (typeof onClose === "function") onClose(); }} placement="end" style={{ width: 500 }}>
+                <Offcanvas.Header closeButton style={{ borderBottom: "none", paddingBottom: 8 }} >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2, width: "100%", justifyContent: "space-between" }}>
+                        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                            <RocketLaunchIcon sx={{ color: '#3b5bd3' }} />
+                            <Typography variant="h6" sx={{ fontWeight: 700, color: '#3b5bd3' }}>{title}</Typography>
+                        </Box>
+                    </Box>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <form onSubmit={handleSubmit}>
-                        <Grid container direction="column" spacing={2}>
-                            <Grid item>
+                        <Grid container  spacing={2}>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="name"
@@ -137,7 +145,7 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="model"
@@ -150,7 +158,7 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="starship_class"
@@ -163,7 +171,7 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="length"
@@ -176,7 +184,7 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="passengers"
@@ -189,7 +197,7 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="max_atmosphering_speed"
@@ -202,7 +210,7 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="hyperdrive_rating"
@@ -215,7 +223,7 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="MGLT"
@@ -228,7 +236,7 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="cargo_capacity"
@@ -241,7 +249,7 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     name="consumables"
@@ -255,23 +263,35 @@ const FormularioNave = ({ open, onClose, initialValues, mode, refreshData }) => 
                                 />
                             </Grid>
                         </Grid>
-                        <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-                            {mode === "view" ? "Cerrar" : "Guardar"}
-                        </Button>
+                       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                            <Button type="submit" variant="contained">
+                                {mode === "view" ? "Cerrar" : "Guardar"}
+                            </Button>
+                        </Box>
                     </form>
                 </Offcanvas.Body>
             </Offcanvas>
 
-            <Modal show={modalInfo.open} onHide={handleCloseConfirmationModal} centered>
+                  <Modal show={modalInfo.open} onHide={handleCloseConfirmationModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>{modalInfo.title}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    {modalInfo.message}
+
+                <Modal.Body className="text-center">
+                    {modalInfo.success ? (
+                        <CheckCircleIcon sx={{ fontSize: 60, color: "#1976d2", marginBottom: 2 }} />
+                    ) : (
+                        <ErrorIcon sx={{ fontSize: 60, color: "red", marginBottom: 2 }} />
+                    )}
+
+                    <p style={{ fontSize: "16px", color: "#333", marginTop: "10px" }}>
+                        {modalInfo.message}
+                    </p>
                 </Modal.Body>
             </Modal>
+
         </>
     );
 };
 
-export default FormularioNave;
+export default FormStarship;

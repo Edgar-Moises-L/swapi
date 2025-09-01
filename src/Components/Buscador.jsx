@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 
+
 function Buscador({ onSearch }) {
   const [input, setInput] = useState("");
 

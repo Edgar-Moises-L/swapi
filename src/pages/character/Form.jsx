@@ -1,12 +1,15 @@
-import { TextField, Button, Grid, Select, MenuItem, FormHelperText, InputLabel, FormControl, Checkbox, ListItemText } from "@mui/material";
+import { TextField, Button, Grid, Select, MenuItem, InputLabel, FormControl, Checkbox, ListItemText, Box, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useState, useEffect } from "react";
 import { putData, postData, fetchList } from "../../services/Api.jsx";
 import { Modal } from "react-bootstrap";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import PeopleIcon from "@mui/icons-material/People";
 
-const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }) => {
+const FormCharacter = ({ open, onClose, initialValues, mode, refreshData }) => {
     const [showOffcanvas, setShowOffcanvas] = useState(open);
     const [films, setFilms] = useState([]);
     const [starships, setStarships] = useState([]);
@@ -153,21 +156,20 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
 
     return (
         <>
-            <Offcanvas
-                show={showOffcanvas}
-                onHide={() => {
-                    setShowOffcanvas(false);
-                    if (typeof onClose === "function") onClose();
-                }}
-                placement="end"
-            >
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>{title}</Offcanvas.Title>
+            <Offcanvas show={showOffcanvas} onHide={() => { setShowOffcanvas(false); if (typeof onClose === "function") onClose(); }} placement="end" style={{ width: 500 }}>
+                <Offcanvas.Header closeButton style={{ borderBottom: "none", paddingBottom: 8 }} >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2, width: "100%", justifyContent: "space-between" }}>
+                        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                            <PeopleIcon sx={{ color: '#3b5bd3' }} />
+                            <Typography variant="h6" sx={{ fontWeight: 700, color: '#3b5bd3' }}>{title}</Typography>
+                        </Box>
+                    </Box>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <form onSubmit={handleSubmit}>
-                        <Grid container direction="column" spacing={2}>
-                            <Grid item>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+
                                 <TextField
                                     label="Nombre"
                                     name="name"
@@ -180,7 +182,7 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                                 />
                             </Grid>
 
-                            <Grid item>
+                            <Grid item xs={6}>
                                 <TextField
                                     label="Año de nacimiento"
                                     name="birth_year"
@@ -191,7 +193,7 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                                 />
                             </Grid>
 
-                            <Grid item>
+                            <Grid item xs={6}>
                                 <TextField
                                     label="Color de ojos"
                                     name="eye_color"
@@ -214,7 +216,7 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                             </Grid>
 
 
-                            <Grid item>
+                            <Grid item xs={6}>
                                 <TextField
                                     label="Color del pelo"
                                     name="hair_color"
@@ -224,7 +226,7 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={6}>
                                 <TextField
                                     label="Altura"
                                     name="height"
@@ -234,7 +236,7 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={6}>
                                 <TextField
                                     label="Peso"
                                     name="mass"
@@ -243,8 +245,8 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                                     fullWidth
                                     disabled={mode === "view"}
                                 />
-                            </Grid>
-                            <Grid item>
+                            </Grid >
+                            <Grid item xs={6}>
                                 <TextField
                                     label="Color de piel"
                                     name="skin_color"
@@ -257,7 +259,8 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
 
 
 
-                            <Grid item>
+                            <Grid item xs={6}>
+                                Planeta natal
                                 <FormControl fullWidth>
                                     <InputLabel id="homeworld-label">Planeta natal</InputLabel>
                                     <Select
@@ -276,7 +279,8 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                                 </FormControl>
                             </Grid>
 
-                            <Grid item>
+                            <Grid item xs={6}>
+                                Especie
                                 <FormControl fullWidth>
                                     <InputLabel id="species-label">Especie</InputLabel>
                                     <Select
@@ -295,7 +299,8 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                                 </FormControl>
                             </Grid>
 
-                            <Grid item>
+                            <Grid item xs={6}>
+                                Películas
                                 <FormControl fullWidth>
                                     <InputLabel id="films-label">Películas</InputLabel>
                                     <Select
@@ -319,7 +324,8 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                                 </FormControl>
                             </Grid>
 
-                            <Grid item>
+                            <Grid item xs={12}>
+                                Naves espaciales
                                 <FormControl fullWidth>
                                     <InputLabel id="starships-label">Naves</InputLabel>
                                     <Select
@@ -343,7 +349,8 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                                 </FormControl>
                             </Grid>
 
-                            <Grid item>
+                            <Grid item xs={6}>
+                                Vehículos
                                 <FormControl fullWidth>
                                     <InputLabel id="vehicles-label">Vehículos</InputLabel>
                                     <Select
@@ -369,30 +376,42 @@ const FormularioPersonaje = ({ open, onClose, initialValues, mode, refreshData }
                         </Grid>
 
                         {mode === "view" ? (
-                            <Button type="button" variant="contained" sx={{ mt: 2 }} onClick={() => setShowOffcanvas(false)}>
-                                Cerrar
-                            </Button>
+                            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                                <Button type="button" variant="contained" onClick={() => setShowOffcanvas(false)}>
+                                    Cerrar
+                                </Button>
+                            </Box>
                         ) : (
-                            <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-                                Guardar
-                            </Button>
+                            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                                <Button type="submit" variant="contained">
+                                    Guardar
+                                </Button>
+                            </Box>
                         )}
                     </form>
                 </Offcanvas.Body>
             </Offcanvas>
-            <Modal
-                show={modalInfo.open}
-                onHide={handleCloseConfirmationModal}
-                centered
-            >
+            <Modal show={modalInfo.open} onHide={handleCloseConfirmationModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>{modalInfo.title}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{modalInfo.message}</Modal.Body>
+
+                <Modal.Body className="text-center">
+                    {modalInfo.success ? (
+                        <CheckCircleIcon sx={{ fontSize: 60, color: "#1976d2", marginBottom: 2 }} />
+                    ) : (
+                        <ErrorIcon sx={{ fontSize: 60, color: "red", marginBottom: 2 }} />
+                    )}
+
+                    <p style={{ fontSize: "16px", color: "#333", marginTop: "10px" }}>
+                        {modalInfo.message}
+                    </p>
+                </Modal.Body>
             </Modal>
+
 
         </>
     );
 };
 
-export default FormularioPersonaje;
+export default FormCharacter;

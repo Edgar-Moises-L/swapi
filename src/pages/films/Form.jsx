@@ -1,10 +1,13 @@
-import { TextField, Button, Grid } from "@mui/material";
+import { TextField, Button, Grid, Box, Typography} from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useState, useEffect } from 'react';
 import { putData, postData } from '../../services/Api.jsx';
 import { Modal } from 'react-bootstrap';
+import MovieIcon from "@mui/icons-material/Movie";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
     const [showOffcanvas, setShowOffcanvas] = useState(open);
@@ -32,7 +35,7 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
             refreshData();
         }
     };
-    
+
 
     const onSubmit = async (data) => {
         try {
@@ -45,15 +48,15 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
             setShowOffcanvas(false);
             if (typeof onClose === "function") onClose();
 
-            if (mode === "create" || mode === "edit" ) {
-            setModalInfo({
-                open: true,
-                title: "Registro guardado con éxito",
-                message: "La película se ha guardado correctamente.",
-                success: true,
-            });
-        }
-            
+            if (mode === "create" || mode === "edit") {
+                setModalInfo({
+                    open: true,
+                    title: "Registro guardado con éxito",
+                    message: "La película se ha guardado correctamente.",
+                    success: true,
+                });
+            }
+
         } catch (error) {
             console.error("Error al guardar:", error);
             setShowOffcanvas(false);
@@ -87,14 +90,22 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
 
     return (
         <>
-            <Offcanvas show={showOffcanvas} onHide={() => { setShowOffcanvas(false); if (typeof onClose === "function") onClose(); }} placement="end">
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>{title}</Offcanvas.Title>
+            <Offcanvas show={showOffcanvas} onHide={() => { setShowOffcanvas(false); if (typeof onClose === "function") onClose(); }} placement="end" style={{ width: 500 }}>
+                <Offcanvas.Header closeButton style={{ borderBottom: "none", paddingBottom: 8 }} >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2, width: "100%", justifyContent: "space-between" }}>
+                        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                            <MovieIcon sx={{ color: '#3b5bd3' }} />
+                            <Typography variant="h6" sx={{ fontWeight: 700, color: '#3b5bd3' }}>{title}</Typography>
+                        </Box>
+                    </Box>
                 </Offcanvas.Header>
+
                 <Offcanvas.Body>
+
                     <form onSubmit={handleSubmit}>
-                        <Grid container direction="column" alignContent={"center"} justifyContent={"space-evenly"} spacing={2} sx={{ width: "100%" }}>
-                            <Grid item xs={12} md={8}>
+                        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
+                            <Grid item xs={12} md={6}>
+                        
                                 <TextField
                                     label="Título"
                                     name="title"
@@ -106,7 +117,8 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={8}>
+                            <Grid item xs={12} md={6}>
+                   
                                 <TextField
                                     label="Director"
                                     name="director"
@@ -118,7 +130,8 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
                                     disabled={mode === "view"}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={8}>
+                            <Grid item xs={12} md={6}>
+                      
                                 <TextField
                                     label="Productor"
                                     name="producer"
@@ -131,9 +144,13 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
                                 />
                             </Grid>
                         </Grid>
-                        <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-                            {mode === "view" ? "Cerrar" : "Guardar"}
-                        </Button>
+
+                        <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
+                            <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+                                {mode === "view" ? "Cerrar" : "Guardar"}
+                            </Button>
+                        </Box>
+
                     </form>
                 </Offcanvas.Body>
             </Offcanvas>
@@ -143,8 +160,17 @@ const Formulario = ({ open, onClose, initialValues, mode, refreshData }) => {
                 <Modal.Header closeButton>
                     <Modal.Title>{modalInfo.title}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    {modalInfo.message}
+
+                <Modal.Body className="text-center">
+                    {modalInfo.success ? (
+                        <CheckCircleIcon sx={{ fontSize: 60, color: "#1976d2", marginBottom: 2 }} />
+                    ) : (
+                        <ErrorIcon sx={{ fontSize: 60, color: "red", marginBottom: 2 }} />
+                    )}
+
+                    <p style={{ fontSize: "16px", color: "#333", marginTop: "10px" }}>
+                        {modalInfo.message}
+                    </p>
                 </Modal.Body>
             </Modal>
 

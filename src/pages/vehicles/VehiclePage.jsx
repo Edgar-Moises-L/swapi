@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper';
 import Buscador from '../../Components/Buscador.jsx';
 import CustomModal from '../../Components/Modal.jsx';
 import Loading from '../../Components/Loading.jsx';
-import FormComponent from './Formulario.jsx'
+import FormComponent from './Form.jsx'
 
 function VehiclePage() {
     const url_base = "/vehicles";
